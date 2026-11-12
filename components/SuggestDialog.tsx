@@ -11,7 +11,7 @@ type Props = {
   onPick: (text: string) => void;
 };
 
-/** Carrousel d'idées de début d'histoire. */
+/** Carousel of story opening ideas. */
 export default function SuggestDialog({ index, onIndex, onClose, onPick }: Props) {
   const { L } = useLang();
   const ops = L.openings;
