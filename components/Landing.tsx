@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useLang } from "@/lib/i18n";
 import { durLeft, isSecret, splitParas } from "@/lib/strings";
-import { initAnalytics } from "@/lib/track";
+import { initAnalytics, track } from "@/lib/track";
 import { PenIcon } from "./icons";
 import NewStoryDialog from "./NewStoryDialog";
 import SecretOverlay from "./SecretOverlay";
@@ -12,7 +12,7 @@ const WEEK = 7 * 864e5;
 const DRAFT_KEY = "tms-wdraft";
 
 export default function Landing() {
-  const { L, toggleLang } = useLang();
+  const { L, lang, toggleLang } = useLang();
   const W = L.welcome;
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -97,6 +97,7 @@ export default function Landing() {
       return;
     }
     if (draft.trim()) {
+      track("demo_send", { words: draft.trim().split(/\s+/).length }, lang);
       setSent(true);
       setSentAt(Date.now());
     }
@@ -112,7 +113,15 @@ export default function Landing() {
   const paras = sent ? splitParas(draft) : [];
   const clock = sent ? `${L.leftPrefix} ${durLeft(L, WEEK - Math.max(0, (now || Date.now()) - sentAt))}` : "";
 
-  const openNew = () => setDialogOpen(true);
+  const openNew = (position: "hero" | "closing") => {
+    track("start_click", { position }, lang);
+    setDialogOpen(true);
+  };
+
+  const switchLang = () => {
+    track("lang_switch", { from: lang, to: lang === "fr" ? "en" : "fr" }, lang);
+    toggleLang();
+  };
 
   return (
     <div className="page">
@@ -120,7 +129,7 @@ export default function Landing() {
         <span className="brand">
           Twist My <span style={{ fontStyle: "italic" }}>Story</span>
         </span>
-        <button type="button" className="btn btn-ghost lang-btn" onClick={toggleLang} title={L.switchLang} aria-label={L.switchLang}>
+        <button type="button" className="btn btn-ghost lang-btn" onClick={switchLang} title={L.switchLang} aria-label={L.switchLang}>
           {L.langLabel}
         </button>
       </header>
@@ -133,7 +142,7 @@ export default function Landing() {
           </h1>
           <p className="tagline">{L.tagline}</p>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 14 }}>
-            <button type="button" className="cta" onClick={openNew}>
+            <button type="button" className="cta" onClick={() => openNew("hero")}>
               <PenIcon />
               <span className="cta-label">{W.start}</span>
             </button>
@@ -265,7 +274,7 @@ export default function Landing() {
           <p className="lines-big" style={{ margin: "0 0 6px", fontSize: "clamp(26px,5vw,32px)" }}>
             {W.closeQ}
           </p>
-          <button type="button" className="cta" onClick={openNew}>
+          <button type="button" className="cta" onClick={() => openNew("closing")}>
             <PenIcon />
             <span className="cta-label">{W.closeCta}</span>
           </button>

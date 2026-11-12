@@ -18,13 +18,21 @@ Site Next.js (App Router, TypeScript) reprenant le design « Twist My Story — 
 
 | Événement | Quand | Données |
 | --- | --- | --- |
+| `start_click` | clic sur « Commencer à écrire » | `position` (`hero` / `closing`) |
+| `demo_send` | suite envoyée dans l'histoire d'exemple | `words` |
+| `lang_switch` | bascule FR / EN | `from`, `to` |
 | `story_created` | validation du titre / rythme | `title`, `period` |
 | `with` | prénom du coauteur validé | `partner` |
 | `ideas_open` / `idea_use` | ouverture / choix d'une idée de début | `idea` |
 | `intro` | début d'histoire validé | `partner`, `opening` |
 | `pay_click` | clic sur « Ouvrir mon histoire pour 1,99 € » | `partner` |
 | `email` | e-mail laissé | `email`, `partner`, `title` |
-| `keep_shown` / `keep_copy` | écran « Votre début d'histoire » / copie | |
+| `email_error` | e-mail vide ou invalide | `reason` |
+| `email_declined` | « Non merci » sur l'écran e-mail | `partner` |
+| `dialog_close` | fenêtre fermée avant la fin | `step`, `has_opening` / `copied` |
+| `keep_shown` / `keep_copy` | écran « Votre début d'histoire » / copie | `ok` |
+
+Les erreurs JavaScript (non interceptées, et l'échec de la copie) sont aussi envoyées au suivi des erreurs de PostHog.
 
 Chaque événement porte aussi `lang` et `at`. Il est compté dans `localStorage` (`tms-fd`) et, **si une clé PostHog est configurée**, envoyé à PostHog (l'e-mail sert aussi à identifier la personne). Sans clé, rien ne quitte le navigateur.
 
