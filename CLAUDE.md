@@ -4,9 +4,18 @@ Guidance for Claude Code when working in this repository.
 
 ## Language
 
-- **Write everything in the repository in English**: code, comments, documentation (README, ANALYTICS.md, this file), commit messages and pull request descriptions.
+- **Write everything in the repository in English**: code, comments, documentation (README, ANALYTICS.md, this file), and commit messages.
 - **Exception — site copy**: the user-facing texts in `lib/strings.ts` exist in French and English. Keep both; never translate or remove the French copy.
 - The project owner talks to Claude in French: reply in French in the conversation.
+
+## Talking to the project owner
+
+The project owner is **not a developer**. Explain everything as you would to a beginner:
+
+- Use plain, everyday words. Avoid jargon; when a technical term is unavoidable (commit, branch, deploy…), explain it in one simple sentence.
+- Give step-by-step instructions with exact button names and links when the owner has to do something themselves (GitHub, Vercel, PostHog).
+- Say what changed on the live site in concrete terms, not in code terms.
+- Keep answers short and clear; one idea at a time.
 
 ## Project
 
@@ -38,7 +47,8 @@ Run `npm run lint` and `npm run build` before committing. There are no tests.
 - Project is on PostHog EU cloud (`https://eu.i.posthog.com`). The `phc_…` key is public config, not a secret; never commit `.env.local` anyway.
 - Emails collected by the flow are only stored in PostHog (no database). Treat them as personal data.
 
-## Deployment
+## Git workflow and deployment
 
-- Vercel deploys `main` to production automatically on every merge.
-- Work on a branch and open a pull request; don't push to `main` directly.
+- **Never open pull requests.** Always commit and push directly to `main`.
+- Vercel deploys `main` to production automatically: **every push to `main` goes live within a minute or two.** So before every push, run `npm run lint` and `npm run build` and only push if both pass.
+- If something breaks after a push, the fastest fix is Vercel → Deployments → previous deployment → "Promote to Production" (instant rollback), then fix the code.
