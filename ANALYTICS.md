@@ -30,6 +30,10 @@ Every event sent with `track()` carries:
 
 PostHog adds its usual properties (`$current_url`, `$browser`, `$device_type`, `$referrer`, etc.).
 
+## PostHog dashboard
+
+[Test marché Twist My Story](https://eu.posthog.com/project/342060/dashboard/1109984): unique visitors, €1.99 clicks, emails left, the funnel below, where visitors close the dialog, and which "Start writing" button they use. When an event in the funnel is renamed, update the dashboard insights too.
+
 ## The market test funnel
 
 ```
