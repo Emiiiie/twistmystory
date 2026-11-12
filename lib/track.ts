@@ -9,8 +9,7 @@ import type { PostHog } from "posthog-js";
  * - If NEXT_PUBLIC_POSTHOG_KEY is set: the event is also sent to PostHog.
  *   Without a key, nothing leaves the browser.
  *
- * Events: start_click, demo_send, lang_switch, story_created, with, intro, ideas_open, idea_use,
- * pay_click, email, email_error, email_declined, dialog_close, keep_shown, keep_copy.
+ * Events: see ANALYTICS.md.
  * Uncaught JavaScript errors are also sent to PostHog (error tracking).
  */
 
@@ -53,7 +52,7 @@ export function track(event: string, data: Record<string, unknown> = {}, lang?: 
   const props = { ...data, lang, at: new Date().toISOString() };
   initAnalytics().then((ph) => {
     if (!ph) return;
-    if (event === "email" && typeof data.email === "string") ph.identify(data.email, { email: data.email, lang });
+    if (event === "story_email_submit_click" && typeof data.email === "string") ph.identify(data.email, { email: data.email, lang });
     ph.capture(event, props);
   });
 }

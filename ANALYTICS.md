@@ -33,12 +33,13 @@ PostHog adds its usual properties (`$current_url`, `$browser`, `$device_type`, `
 ## The market test funnel
 
 ```
-$pageview → start_click → story_created → with → intro → pay_click → email
+$pageview → start_click → story_title_create_click → story_partner_continue_click
+          → story_intro_continue_click → story_paywall_pay_click → story_email_submit_click
 ```
 
-- `pay_click` measures **intent to pay**: the click on "Open my story for €1.99". The payment is fake; nothing is charged.
-- `email` measures the **final conversion**: an email left to reserve a free story.
-- `dialog_close` and `email_declined` show **where visitors drop off**.
+- `story_paywall_pay_click` measures **intent to pay**: the click on "Open my story for €1.99". The payment is fake; nothing is charged.
+- `story_email_submit_click` measures the **final conversion**: an email left to reserve a free story.
+- `story_close_click` and `story_email_no_thanks_click` show **where visitors drop off**.
 
 ## Custom events
 
@@ -52,44 +53,69 @@ $pageview → start_click → story_created → with → intro → pay_click →
 
 ### Creation dialog — `components/NewStoryDialog.tsx`
 
-In flow order:
+Every event in this dialog is named `story_<screen>_<button>_click`, so the name says which button was clicked on which screen. In flow order:
 
-| Event | When | Properties |
+| Event | Screen → button clicked | Properties |
 | --- | --- | --- |
-| `story_created` | step 1 submitted (title or "later", turn length) | `pair`: always `invite` · `title`: entered title, empty if "later" · `period`: turn length in days (`3`, `7`, `14`, `30`) |
-| `with` | co-author's first name submitted | `partner`: first name |
-| `ideas_open` | "Opening ideas" carousel opened | — |
-| `idea_use` | an opening idea picked | `idea`: idea text |
-| `intro` | story opening submitted ("Create my story") | `partner` · `opening`: story opening text (may be empty) |
-| `pay_click` | click on "Open my story for €1.99" | `partner` |
-| `email_error` | email rejected on submit | `reason`: `empty` or `bad` (invalid format) |
-| `email` | valid email left for the free story | `email` · `partner` · `title` |
-| `email_declined` | click on "No thanks" on the email screen | `partner` |
-| `keep_shown` | on close, after the email screen, the "Your story opening" screen is shown (only if an opening was written) | — |
-| `keep_copy` | click on "Copy text" on that screen | `ok`: `true` if the copy succeeded |
-| `dialog_close` | dialog closed (close button, click outside, Escape key, "No thanks", "Close") | see below |
+| `story_title_create_click` | step 1 (title and turn length) → "Create my story" (or Enter key) | `pair`: always `invite` · `title`: entered title, empty if "later" · `period`: turn length in days (`3`, `7`, `14`, `30`) |
+| `story_partner_continue_click` | co-author's first name → "Continue" (or Enter key) | `partner`: first name |
+| `story_intro_ideas_click` | story opening → "Opening ideas" (opens the carousel) | — |
+| `story_ideas_choose_click` | opening ideas carousel → "Choose →" | `idea`: idea text |
+| `story_intro_continue_click` | story opening → "Create my story" | `partner` · `opening`: story opening text (may be empty) |
+| `story_paywall_pay_click` | paywall → "Open my story for €1.99" | `partner` |
+| `story_email_submit_invalid_click` | email screen → "Save my free story", but the email is rejected | `reason`: `empty` or `bad` (invalid format) |
+| `story_email_submit_click` | email screen → "Save my free story", with a valid email | `email` · `partner` · `title` |
+| `story_email_no_thanks_click` | email screen → "No thanks" | `partner` |
+| `story_keep_copy_click` | "Your story opening" screen → "Copy text" | `ok`: `true` if the copy succeeded |
+| `story_close_click` | any screen → close (close button, "Close", "No thanks", click outside the dialog, or Escape key) | see below |
 
-#### `dialog_close` details
+#### `story_close_click` details
 
-`step` is the step at which the dialog was closed:
+| Property | Description |
+| --- | --- |
+| `step` | screen on which the dialog was closed (see the table below) |
+| `has_opening` | whether a story opening was written (not sent from `keep`) |
+| `to_keep` | `true` if closing opens the "Your story opening" screen instead of closing the dialog |
+| `copied` | only from `keep`: whether the text was copied |
 
-| `step` | Meaning | Other property |
-| --- | --- | --- |
-| `main` | step 1, title and turn length | `has_opening` |
-| `with` | co-author's first name | `has_opening` |
-| `intro` | story opening | `has_opening` |
-| `locked` | paywall, before the €1.99 click | `has_opening` |
-| `sorry` | email screen, no story opening written | `has_opening` (`false`) |
-| `done` | confirmation after the email, no story opening written | `has_opening` (`false`) |
-| `keep` | "Your story opening" screen | `copied`: whether the text was copied |
+| `step` | Screen |
+| --- | --- |
+| `main` | step 1, title and turn length |
+| `with` | co-author's first name |
+| `intro` | story opening |
+| `locked` | paywall, before the €1.99 click |
+| `sorry` | email screen |
+| `done` | confirmation after the email |
+| `keep` | "Your story opening" screen |
 
-From `sorry` or `done`, if a story opening was written, closing first shows the "Your story opening" screen (`keep_shown`). `dialog_close` is then only sent when leaving that screen, with `step: keep`.
+From `sorry` or `done`, if a story opening was written, closing does not close the dialog yet: it shows the "Your story opening" screen (`to_keep: true`). The dialog really closes on the next `story_close_click`, with `step: keep`.
+
+"No thanks" sends `story_email_no_thanks_click` then `story_close_click` (`step: sorry`).
+
+#### Renamed events
+
+These events were renamed on 2026-11-12. Data sent before that date is under the old names in PostHog.
+
+| Old name | New name |
+| --- | --- |
+| `story_created` | `story_title_create_click` |
+| `with` | `story_partner_continue_click` |
+| `ideas_open` | `story_intro_ideas_click` |
+| `idea_use` | `story_ideas_choose_click` |
+| `intro` | `story_intro_continue_click` |
+| `pay_click` | `story_paywall_pay_click` |
+| `email_error` | `story_email_submit_invalid_click` |
+| `email` | `story_email_submit_click` |
+| `email_declined` | `story_email_no_thanks_click` |
+| `keep_copy` | `story_keep_copy_click` |
+| `dialog_close` | `story_close_click` |
+| `keep_shown` | removed: now `story_close_click` with `to_keep: true` |
 
 ## Identifying visitors
 
 - PostHog is configured with `person_profiles: "identified_only"`: a person profile is only created for identified visitors.
-- On the `email` event, the visitor is identified by their email (`posthog.identify(email, { email, lang })`). Their earlier events from the same visit are linked to that profile.
-- Emails are **only stored in PostHog** (the site has no database). To get the list: PostHog → People, or filter Activity on the `email` event.
+- On the `story_email_submit_click` event, the visitor is identified by their email (`posthog.identify(email, { email, lang })`). Their earlier events from the same visit are linked to that profile.
+- Emails are **only stored in PostHog** (the site has no database). To get the list: PostHog → People, or filter Activity on the `story_email_submit_click` event.
 
 > **Personal data:** `email`, `partner` (co-author's first name), `title` and `opening` (text written by the visitor) are sent to PostHog. This must be covered by the privacy policy (the footer link still points to `#`).
 
@@ -98,7 +124,7 @@ From `sorry` or `done`, if a story opening was written, closing first shows the 
 | Event | When | Properties |
 | --- | --- | --- |
 | `$exception` (automatic) | any uncaught JavaScript error (`capture_exceptions: true`) | standard PostHog properties (message, stack trace…) |
-| `$exception` via `trackError` | copying the story opening failed (`keep_copy failed`) | `step`: `keep` |
+| `$exception` via `trackError` | copying the story opening failed (`story_keep_copy_click failed`) | `step`: `keep` |
 
 These errors show up in **Error tracking** in PostHog.
 
@@ -118,5 +144,5 @@ Sent by `posthog-js` without any code on our side (`defaults: "2026-05-30"`), de
 ## Adding an event
 
 1. Call `track("event_name", { property: value }, lang)` (or `t(...)` in `NewStoryDialog.tsx`).
-2. Use `snake_case`, in `object_action` form (`start_click`, `email_declined`).
+2. Use `snake_case`. Click events end with `_click`; in the creation dialog, use `story_<screen>_<button>_click` (`story_intro_continue_click`).
 3. Add a row to this file.

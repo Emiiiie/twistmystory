@@ -62,13 +62,13 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
   }, [open]);
 
   const close = () => {
-    if ((step === "sorry" || step === "done") && opening.trim()) {
-      t("keep_shown");
+    const toKeep = (step === "sorry" || step === "done") && !!opening.trim();
+    t("story_close_click", { step, has_opening: !!opening.trim(), to_keep: toKeep });
+    if (toKeep) {
       setCopied(false);
       setStep("keep");
       return;
     }
-    t("dialog_close", { step, has_opening: !!opening.trim() });
     setErr(null);
     onClose();
   };
@@ -93,18 +93,18 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
     setMinH(dlg.current ? dlg.current.offsetHeight : 0);
     setBackAnim(false);
     setStep("with");
-    t("story_created", { pair: "invite", title: title || "", period });
+    t("story_title_create_click", { pair: "invite", title: title || "", period });
   };
 
   const goWith = () => {
     const p = partner.trim();
     if (!p) return;
-    t("with", { partner: p });
+    t("story_partner_continue_click", { partner: p });
     setStep("intro");
   };
 
   const goIntro = () => {
-    t("intro", { partner: partner.trim(), opening: opening.trim() });
+    t("story_intro_continue_click", { partner: partner.trim(), opening: opening.trim() });
     setStep("locked");
   };
 
@@ -122,14 +122,14 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
   const submitEmail = () => {
     const em = email.trim();
     if (!em) {
-      t("email_error", { reason: "empty" });
+      t("story_email_submit_invalid_click", { reason: "empty" });
       return setErr("empty");
     }
     if (!EMAIL_RE.test(em)) {
-      t("email_error", { reason: "bad" });
+      t("story_email_submit_invalid_click", { reason: "bad" });
       return setErr("bad");
     }
-    t("email", { email: em, partner: partner.trim(), title: title || "" });
+    t("story_email_submit_click", { email: em, partner: partner.trim(), title: title || "" });
     setErr(null);
     setStep("done");
   };
@@ -160,13 +160,13 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
         ok = document.execCommand("copy");
       } catch {}
     }
-    if (!ok) trackError(new Error("keep_copy failed"), { step: "keep" });
+    if (!ok) trackError(new Error("story_keep_copy_click failed"), { step: "keep" });
     setCopied(true);
-    t("keep_copy", { ok });
+    t("story_keep_copy_click", { ok });
   };
 
   const openIdeas = () => {
-    t("ideas_open");
+    t("story_intro_ideas_click");
     const n = L.openings.length || 1;
     const i = suggestIdx ?? Math.floor(Math.random() * n);
     setSuggestIdx(i);
@@ -278,7 +278,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                   type="button"
                   className="btn btn-ghost btn-icon"
                   onClick={() => {
-                    t("dialog_close", { step: "keep", copied });
+                    t("story_close_click", { step: "keep", copied, to_keep: false });
                     setErr(null);
                     onClose();
                   }}
@@ -388,7 +388,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                     type="button"
                     className="pill-cta"
                     onClick={() => {
-                      t("pay_click", { partner: partner.trim() });
+                      t("story_paywall_pay_click", { partner: partner.trim() });
                       setStep("sorry");
                     }}
                   >
@@ -437,7 +437,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                     type="button"
                     className="btn btn-ghost"
                     onClick={() => {
-                      t("email_declined", { partner: partner.trim() });
+                      t("story_email_no_thanks_click", { partner: partner.trim() });
                       close();
                     }}
                     style={{ alignSelf: "center", fontSize: 14, marginTop: -8 }}
@@ -490,7 +490,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
           }}
           onClose={() => setSuggest(null)}
           onPick={(text) => {
-            t("idea_use", { idea: text });
+            t("story_ideas_choose_click", { idea: text });
             setOpening(text);
             setSuggest(null);
           }}
