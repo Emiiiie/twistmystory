@@ -52,8 +52,9 @@ export function track(event: string, data: Record<string, unknown> = {}, lang?: 
   const props = { ...data, lang, at: new Date().toISOString() };
   initAnalytics().then((ph) => {
     if (!ph) return;
-    if (event === "story_email_submit_click" && typeof data.email === "string") ph.identify(data.email, { email: data.email, lang });
+    // Capture before identify, so the email event stays on the same person as the rest of the funnel.
     ph.capture(event, props);
+    if (event === "story_email_submit_click" && typeof data.email === "string") ph.identify(data.email, { email: data.email, lang });
   });
 }
 
