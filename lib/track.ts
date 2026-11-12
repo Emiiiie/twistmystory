@@ -9,7 +9,9 @@ import type { PostHog } from "posthog-js";
  * - Si NEXT_PUBLIC_POSTHOG_KEY est défini : l'événement est aussi envoyé à PostHog.
  *   Sans clé, rien ne quitte le navigateur.
  *
- * Événements : story_created, with, intro, ideas_open, idea_use, pay_click, email, keep_shown, keep_copy.
+ * Événements : start_click, demo_send, lang_switch, story_created, with, intro, ideas_open, idea_use,
+ * pay_click, email, email_error, email_declined, dialog_close, keep_shown, keep_copy.
+ * Les erreurs JavaScript non interceptées sont aussi envoyées à PostHog (suivi des erreurs).
  */
 
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -19,10 +21,22 @@ let client: Promise<PostHog | null> | null = null;
 
 export function initAnalytics(): Promise<PostHog | null> {
   if (client) return client;
-  if (!KEY || typeof window === "undefined") return (client = Promise.resolve(null));
+  if (typeof window === "undefined") return Promise.resolve(null);
+  if (!KEY) {
+    if (process.env.NODE_ENV === "development")
+      console.error(
+        "NEXT_PUBLIC_POSTHOG_KEY variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once NEXT_PUBLIC_POSTHOG_KEY is configured",
+      );
+    return (client = Promise.resolve(null));
+  }
   client = import("posthog-js")
     .then(({ default: posthog }) => {
-      posthog.init(KEY, { api_host: HOST, person_profiles: "identified_only", capture_pageview: true });
+      posthog.init(KEY, {
+        api_host: HOST,
+        defaults: "2026-05-30",
+        person_profiles: "identified_only",
+        capture_exceptions: true,
+      });
       return posthog;
     })
     .catch(() => null);
@@ -42,4 +56,9 @@ export function track(event: string, data: Record<string, unknown> = {}, lang?: 
     if (event === "email" && typeof data.email === "string") ph.identify(data.email, { email: data.email, lang });
     ph.capture(event, props);
   });
+}
+
+/** Envoie une erreur interceptée à PostHog (suivi des erreurs). */
+export function trackError(error: unknown, data: Record<string, unknown> = {}) {
+  initAnalytics().then((ph) => ph?.captureException(error, data));
 }

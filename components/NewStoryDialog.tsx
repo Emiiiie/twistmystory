@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { useLang } from "@/lib/i18n";
 import { PERIODS } from "@/lib/strings";
-import { track } from "@/lib/track";
+import { track, trackError } from "@/lib/track";
 import { BulbIcon, CheckIcon, ChevronLeft, CloseIcon, CopyIcon, LockIcon, PenIcon, UnlockIcon } from "./icons";
 import SuggestDialog from "./SuggestDialog";
 import TwoQuills from "./TwoQuills";
@@ -68,6 +68,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
       setStep("keep");
       return;
     }
+    t("dialog_close", { step, has_opening: !!opening.trim() });
     setErr(null);
     onClose();
   };
@@ -120,8 +121,14 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
 
   const submitEmail = () => {
     const em = email.trim();
-    if (!em) return setErr("empty");
-    if (!EMAIL_RE.test(em)) return setErr("bad");
+    if (!em) {
+      t("email_error", { reason: "empty" });
+      return setErr("empty");
+    }
+    if (!EMAIL_RE.test(em)) {
+      t("email_error", { reason: "bad" });
+      return setErr("bad");
+    }
     t("email", { email: em, partner: partner.trim(), title: title || "" });
     setErr(null);
     setStep("done");
@@ -153,8 +160,9 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
         ok = document.execCommand("copy");
       } catch {}
     }
+    if (!ok) trackError(new Error("keep_copy failed"), { step: "keep" });
     setCopied(true);
-    t("keep_copy");
+    t("keep_copy", { ok });
   };
 
   const openIdeas = () => {
@@ -270,6 +278,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                   type="button"
                   className="btn btn-ghost btn-icon"
                   onClick={() => {
+                    t("dialog_close", { step: "keep", copied });
                     setErr(null);
                     onClose();
                   }}
@@ -424,7 +433,15 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                   <button type="button" className="pill-cta" onClick={submitEmail}>
                     <span className="pill-cta-label">{F.submit}</span>
                   </button>
-                  <button type="button" className="btn btn-ghost" onClick={close} style={{ alignSelf: "center", fontSize: 14, marginTop: -8 }}>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      t("email_declined", { partner: partner.trim() });
+                      close();
+                    }}
+                    style={{ alignSelf: "center", fontSize: 14, marginTop: -8 }}
+                  >
                     {F.noThanks}
                   </button>
                 </>
