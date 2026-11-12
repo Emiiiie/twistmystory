@@ -1,7 +1,7 @@
 /*
- * Reconstruction du design system « Nocturne » (classes btn, dialog, input…)
- * + styles de la page d'accueil Twist My Story.
- * Les tokens de couleur et les règles responsive d'origine sont dans design.css.
+ * Rebuilt "Nocturne" design system (btn, dialog, input… classes)
+ * + Twist My Story landing page styles.
+ * The original color tokens and responsive rules live in design.css.
  */
 
 :root {
@@ -125,7 +125,7 @@ button {
   animation: tms-rise 0.2s ease-out both;
 }
 
-/* ---------- Typo ---------- */
+/* ---------- Typography ---------- */
 
 .f-fell {
   font-family: var(--font-fell);
@@ -135,7 +135,7 @@ button {
   font-family: var(--font-garamond);
 }
 
-/* ---------- Boutons de la page ---------- */
+/* ---------- Page buttons ---------- */
 
 .cta {
   font: inherit;
@@ -168,7 +168,7 @@ button {
   line-height: 1;
 }
 
-/* Bouton plein des fenêtres (largeur 100 %) */
+/* Full-width dialog button (100% width) */
 .pill-cta {
   font: inherit;
   width: 100%;
@@ -670,7 +670,7 @@ button {
   color: #5c5750;
 }
 
-/* ---------- Fenêtre « nouvelle histoire » ---------- */
+/* ---------- "New story" dialog ---------- */
 
 .newdlg {
   gap: 12px;

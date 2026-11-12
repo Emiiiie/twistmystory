@@ -38,7 +38,7 @@ export default function Landing() {
     } catch {}
   }, [draft]);
 
-  // Le compte à rebours « Reste 6j 23h » après validation.
+  // The "6d 23h left" countdown shown after sending.
   useEffect(() => {
     if (!sent) return;
     setNow(Date.now());
@@ -46,7 +46,7 @@ export default function Landing() {
     return () => clearInterval(t);
   }, [sent]);
 
-  // Hauteur auto de la zone d'écriture + position du curseur après insertion.
+  // Auto-height for the writing area + caret position after an insertion.
   useLayoutEffect(() => {
     const el = ta.current;
     if (!el) return;

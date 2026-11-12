@@ -1,121 +1,122 @@
-# Suivi des événements (PostHog)
+# Event tracking (PostHog)
 
-Ce fichier liste tous les événements envoyés par le site du test marché Twist My Story.
+This file lists every event sent by the Twist My Story market test site.
 
-## Fonctionnement
+## How it works
 
-- Tout passe par `lib/track.ts` :
-  - `track(event, data, lang)` envoie un événement ;
-  - `trackError(error, data)` envoie une erreur interceptée ;
-  - `initAnalytics()` charge et initialise PostHog au chargement de la page.
-- Chaque événement est **compté dans `localStorage`** (clé `tms-fd`), même sans PostHog.
-- Il est **envoyé à PostHog seulement si `NEXT_PUBLIC_POSTHOG_KEY` est défini**. Sans clé, rien ne quitte le navigateur. En développement, une erreur dans la console signale la clé manquante.
-- Projet PostHog : serveur européen (`https://eu.i.posthog.com`).
+- Everything goes through `lib/track.ts`:
+  - `track(event, data, lang)` sends an event;
+  - `trackError(error, data)` sends a caught error;
+  - `initAnalytics()` loads and initializes PostHog when the page loads.
+- Every event is **counted in `localStorage`** (key `tms-fd`), even without PostHog.
+- It is **sent to PostHog only if `NEXT_PUBLIC_POSTHOG_KEY` is set**. Without a key, nothing leaves the browser. In development, a console error flags the missing key.
+- PostHog project: EU cloud (`https://eu.i.posthog.com`).
 
-### Variables d'environnement
+### Environment variables
 
-| Variable | Valeur | Type dans Vercel |
+| Variable | Value | Type in Vercel |
 | --- | --- | --- |
-| `NEXT_PUBLIC_POSTHOG_KEY` | clé publique du projet (`phc_…`) | config (pas un secret) |
+| `NEXT_PUBLIC_POSTHOG_KEY` | public project key (`phc_…`) | config (not a secret) |
 | `NEXT_PUBLIC_POSTHOG_HOST` | `https://eu.i.posthog.com` | config |
 
-### Propriétés communes
+### Common properties
 
-Tous les événements envoyés avec `track()` portent :
+Every event sent with `track()` carries:
 
-| Propriété | Description |
+| Property | Description |
 | --- | --- |
-| `lang` | langue du site au moment de l'action (`fr` / `en`) |
-| `at` | date et heure côté navigateur (ISO 8601) |
+| `lang` | site language at the time of the action (`fr` / `en`) |
+| `at` | browser-side date and time (ISO 8601) |
 
-PostHog y ajoute ses propriétés habituelles (`$current_url`, `$browser`, `$device_type`, `$referrer`, etc.).
+PostHog adds its usual properties (`$current_url`, `$browser`, `$device_type`, `$referrer`, etc.).
 
-## Le funnel du test marché
+## The market test funnel
 
 ```
 $pageview → start_click → story_created → with → intro → pay_click → email
 ```
 
-- `pay_click` mesure l'**intention de payer** : le clic sur « Ouvrir mon histoire pour 1,99 € ». Le paiement est factice, rien n'est débité.
-- `email` mesure la **conversion finale** : un e-mail laissé pour réserver une histoire offerte.
-- `dialog_close` et `email_declined` montrent **où les visiteurs abandonnent**.
+- `pay_click` measures **intent to pay**: the click on "Open my story for €1.99". The payment is fake; nothing is charged.
+- `email` measures the **final conversion**: an email left to reserve a free story.
+- `dialog_close` and `email_declined` show **where visitors drop off**.
 
-## Événements personnalisés
+## Custom events
 
-### Page d'accueil — `components/Landing.tsx`
+### Landing page — `components/Landing.tsx`
 
-| Événement | Quand | Propriétés |
+| Event | When | Properties |
 | --- | --- | --- |
-| `start_click` | clic sur « Commencer à écrire » (ouvre la fenêtre de création) | `position` : `hero` (bouton du haut) ou `closing` (bouton du bas) |
-| `demo_send` | le visiteur envoie sa suite dans l'histoire d'exemple « Le colocataire » | `words` : nombre de mots |
-| `lang_switch` | bascule FR / EN | `from`, `to` : langue avant / après |
+| `start_click` | click on "Start writing" (opens the creation dialog) | `position`: `hero` (top button) or `closing` (bottom button) |
+| `demo_send` | the visitor sends their part in the sample story "The Roommate" | `words`: word count |
+| `lang_switch` | FR / EN switch | `from`, `to`: language before / after |
 
-### Fenêtre de création — `components/NewStoryDialog.tsx`
+### Creation dialog — `components/NewStoryDialog.tsx`
 
-Par ordre d'apparition dans le parcours :
+In flow order:
 
-| Événement | Quand | Propriétés |
+| Event | When | Properties |
 | --- | --- | --- |
-| `story_created` | validation de l'étape 1 (titre ou « plus tard », durée d'un tour) | `pair` : toujours `invite` · `title` : titre saisi, vide si « plus tard » · `period` : durée d'un tour en jours (`3`, `7`, `14`, `30`) |
-| `with` | prénom du coauteur validé | `partner` : prénom |
-| `ideas_open` | ouverture du carrousel « idées de début » | — |
-| `idea_use` | choix d'une idée de début | `idea` : texte de l'idée |
-| `intro` | début d'histoire validé (« Créer ») | `partner` · `opening` : texte du début d'histoire (peut être vide) |
-| `pay_click` | clic sur « Ouvrir mon histoire pour 1,99 € » | `partner` |
-| `email_error` | e-mail refusé à la validation | `reason` : `empty` (vide) ou `bad` (format invalide) |
-| `email` | e-mail valide laissé pour l'histoire offerte | `email` · `partner` · `title` |
-| `email_declined` | clic sur « Non merci » à l'écran de l'e-mail | `partner` |
-| `keep_shown` | à la fermeture, après l'écran e-mail, l'écran « Votre début d'histoire » s'affiche (seulement si un début a été écrit) | — |
-| `keep_copy` | clic sur « Copier » dans cet écran | `ok` : `true` si la copie a réussi |
-| `dialog_close` | fermeture de la fenêtre (croix, clic à côté, touche Échap, « Non merci », « Fermer ») | voir ci-dessous |
+| `story_created` | step 1 submitted (title or "later", turn length) | `pair`: always `invite` · `title`: entered title, empty if "later" · `period`: turn length in days (`3`, `7`, `14`, `30`) |
+| `with` | co-author's first name submitted | `partner`: first name |
+| `ideas_open` | "Opening ideas" carousel opened | — |
+| `idea_use` | an opening idea picked | `idea`: idea text |
+| `intro` | story opening submitted ("Create my story") | `partner` · `opening`: story opening text (may be empty) |
+| `pay_click` | click on "Open my story for €1.99" | `partner` |
+| `email_error` | email rejected on submit | `reason`: `empty` or `bad` (invalid format) |
+| `email` | valid email left for the free story | `email` · `partner` · `title` |
+| `email_declined` | click on "No thanks" on the email screen | `partner` |
+| `keep_shown` | on close, after the email screen, the "Your story opening" screen is shown (only if an opening was written) | — |
+| `keep_copy` | click on "Copy text" on that screen | `ok`: `true` if the copy succeeded |
+| `dialog_close` | dialog closed (close button, click outside, Escape key, "No thanks", "Close") | see below |
 
-#### Détail de `dialog_close`
+#### `dialog_close` details
 
-`step` indique l'étape où la fenêtre a été fermée :
+`step` is the step at which the dialog was closed:
 
-| `step` | Signification | Autre propriété |
+| `step` | Meaning | Other property |
 | --- | --- | --- |
-| `main` | étape 1, titre et durée | `has_opening` |
-| `with` | prénom du coauteur | `has_opening` |
-| `intro` | début de l'histoire | `has_opening` |
-| `locked` | paywall, avant le clic sur 1,99 € | `has_opening` |
-| `sorry` | écran e-mail, sans début d'histoire écrit | `has_opening` (`false`) |
-| `done` | confirmation après l'e-mail, sans début d'histoire écrit | `has_opening` (`false`) |
-| `keep` | écran « Votre début d'histoire » | `copied` : le texte a-t-il été copié |
+| `main` | step 1, title and turn length | `has_opening` |
+| `with` | co-author's first name | `has_opening` |
+| `intro` | story opening | `has_opening` |
+| `locked` | paywall, before the €1.99 click | `has_opening` |
+| `sorry` | email screen, no story opening written | `has_opening` (`false`) |
+| `done` | confirmation after the email, no story opening written | `has_opening` (`false`) |
+| `keep` | "Your story opening" screen | `copied`: whether the text was copied |
 
-Depuis `sorry` ou `done`, si un début d'histoire a été écrit, la fermeture affiche d'abord l'écran « Votre début d'histoire » (`keep_shown`). `dialog_close` n'est alors envoyé qu'en quittant cet écran, avec `step: keep`.
+From `sorry` or `done`, if a story opening was written, closing first shows the "Your story opening" screen (`keep_shown`). `dialog_close` is then only sent when leaving that screen, with `step: keep`.
 
-## Identification des visiteurs
+## Identifying visitors
 
-- PostHog est configuré avec `person_profiles: "identified_only"` : un profil de personne n'est créé que pour les visiteurs identifiés.
-- À l'événement `email`, le visiteur est identifié avec son e-mail (`posthog.identify(email, { email, lang })`). Ses événements précédents de la même visite sont rattachés à ce profil.
+- PostHog is configured with `person_profiles: "identified_only"`: a person profile is only created for identified visitors.
+- On the `email` event, the visitor is identified by their email (`posthog.identify(email, { email, lang })`). Their earlier events from the same visit are linked to that profile.
+- Emails are **only stored in PostHog** (the site has no database). To get the list: PostHog → People, or filter Activity on the `email` event.
 
-> **Données personnelles :** `email`, `partner` (prénom du coauteur), `title` et `opening` (textes écrits par le visiteur) sont envoyés à PostHog. Il faut en parler dans la politique de confidentialité (le lien du pied de page pointe encore vers `#`).
+> **Personal data:** `email`, `partner` (co-author's first name), `title` and `opening` (text written by the visitor) are sent to PostHog. This must be covered by the privacy policy (the footer link still points to `#`).
 
-## Erreurs
+## Errors
 
-| Événement | Quand | Propriétés |
+| Event | When | Properties |
 | --- | --- | --- |
-| `$exception` (automatique) | toute erreur JavaScript non interceptée (`capture_exceptions: true`) | propriétés standard de PostHog (message, pile d'appels…) |
-| `$exception` via `trackError` | la copie du début d'histoire a échoué (`keep_copy failed`) | `step` : `keep` |
+| `$exception` (automatic) | any uncaught JavaScript error (`capture_exceptions: true`) | standard PostHog properties (message, stack trace…) |
+| `$exception` via `trackError` | copying the story opening failed (`keep_copy failed`) | `step`: `keep` |
 
-Ces erreurs apparaissent dans **Error tracking** dans PostHog.
+These errors show up in **Error tracking** in PostHog.
 
-## Événements automatiques de PostHog
+## Automatic PostHog events
 
-Envoyés par `posthog-js` sans code de notre part (`defaults: "2026-05-30"`), selon les réglages du projet PostHog :
+Sent by `posthog-js` without any code on our side (`defaults: "2026-05-30"`), depending on the PostHog project settings:
 
-| Événement | Description |
+| Event | Description |
 | --- | --- |
-| `$pageview` | chargement de la page |
-| `$pageleave` | départ de la page |
-| `$autocapture` | clics et saisies sur les éléments de la page |
-| `$rageclick` | clics répétés au même endroit |
-| `$web_vitals` | indicateurs de performance (LCP, CLS, INP…) |
-| `$identify` | identification par e-mail (voir plus haut) |
+| `$pageview` | page load |
+| `$pageleave` | leaving the page |
+| `$autocapture` | clicks and inputs on page elements |
+| `$rageclick` | repeated clicks in the same spot |
+| `$web_vitals` | performance metrics (LCP, CLS, INP…) |
+| `$identify` | identification by email (see above) |
 
-## Ajouter un événement
+## Adding an event
 
-1. Appeler `track("nom_evenement", { propriete: valeur }, lang)` (ou `t(...)` dans `NewStoryDialog.tsx`).
-2. Nommer en `snake_case`, au format `objet_action` (`start_click`, `email_declined`).
-3. Ajouter une ligne dans ce fichier.
+1. Call `track("event_name", { property: value }, lang)` (or `t(...)` in `NewStoryDialog.tsx`).
+2. Use `snake_case`, in `object_action` form (`start_click`, `email_declined`).
+3. Add a row to this file.

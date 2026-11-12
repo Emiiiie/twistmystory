@@ -1,49 +1,50 @@
-# Twist My Story — site du test marché
+# Twist My Story — market test site
 
-Site Next.js (App Router, TypeScript) reprenant le design « Twist My Story — Test marché ».
+Next.js site (App Router, TypeScript) built from the "Twist My Story — Market test" design.
 
-## Le parcours
+## The flow
 
-1. **Accueil** : présentation, histoire d'exemple « Le colocataire » où le visiteur peut écrire la suite (brouillon gardé dans le navigateur), bascule FR / EN.
-2. **« Commencer à écrire »** ouvre la fenêtre de création : titre (ou « plus tard ») et durée d'un tour.
-3. **Coauteur** : prénom de la personne avec qui écrire.
-4. **Début de l'histoire**, avec un carrousel d'« idées de début ».
-5. **Paywall factice** : « Ouvrir mon histoire pour 1,99 € ».
-6. **« Pas encore ouvert »** : rien n'est débité, on propose de réserver une histoire offerte avec son e-mail.
-7. À la fermeture, le visiteur peut **copier son début d'histoire**.
+1. **Landing page**: introduction, the sample story "The Roommate" where visitors can write the next part (draft kept in the browser), FR / EN switch.
+2. **"Start writing"** opens the creation dialog: title (or "later") and turn length.
+3. **Co-author**: first name of the person to write with.
+4. **Story opening**, with a carousel of "opening ideas".
+5. **Fake paywall**: "Open my story for €1.99".
+6. **"Not open yet"**: nothing is charged; visitors are offered a free story reserved with their email.
+7. On close, visitors can **copy their story opening**.
 
-## Suivi des événements
+## Event tracking
 
-`lib/track.ts` enregistre chaque étape du parcours. La liste complète des événements, de leurs propriétés et du funnel est dans [`ANALYTICS.md`](ANALYTICS.md).
+`lib/track.ts` records every step of the flow. The full list of events, their properties and the funnel is in [`ANALYTICS.md`](ANALYTICS.md).
 
-Chaque événement porte aussi `lang` et `at`. Il est compté dans `localStorage` (`tms-fd`) et, **si une clé PostHog est configurée**, envoyé à PostHog (l'e-mail sert aussi à identifier la personne). Sans clé, rien ne quitte le navigateur.
+Every event also carries `lang` and `at`. It is counted in `localStorage` (`tms-fd`) and, **if a PostHog key is configured**, sent to PostHog (the email is also used to identify the person). Without a key, nothing leaves the browser.
 
-Pour brancher PostHog, copiez `.env.example` en `.env.local` (ou ajoutez les variables dans Vercel) :
+To connect PostHog, copy `.env.example` to `.env.local` (or add the variables in Vercel):
 
 ```
 NEXT_PUBLIC_POSTHOG_KEY=phc_...
 NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
 ```
 
-## Développement
+## Development
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # build de production
-npm run lint     # vérification TypeScript
+npm run build    # production build
+npm run lint     # TypeScript check
 ```
 
-## Déploiement (Vercel)
+## Deployment (Vercel)
 
-Importez le dépôt GitHub dans Vercel : le framework Next.js est détecté automatiquement, aucune configuration n'est nécessaire. Ajoutez les variables PostHog dans *Settings → Environment Variables* quand vous serez prêt.
+Import the GitHub repository into Vercel: Next.js is detected automatically, no configuration needed. The PostHog variables are set in *Settings → Environment Variables* (as plain config, not secrets). Every merge to `main` is deployed to production.
 
-## Organisation
+## Structure
 
-- `app/` : mise en page, polices (IM Fell English, EB Garamond), styles (`design.css` = tokens et règles responsive du design d'origine, `globals.css` = design system reconstruit et styles de page).
-- `components/Landing.tsx` : page d'accueil et histoire d'exemple.
-- `components/NewStoryDialog.tsx` : fenêtre de création et parcours du test marché.
-- `components/SuggestDialog.tsx` : idées de début.
-- `lib/strings.ts` : tous les textes FR / EN.
+- `app/`: layout, fonts (IM Fell English, EB Garamond), styles (`design.css` = tokens and responsive rules from the original design, `globals.css` = rebuilt design system and page styles).
+- `components/Landing.tsx`: landing page and sample story.
+- `components/NewStoryDialog.tsx`: creation dialog and market test flow.
+- `components/SuggestDialog.tsx`: opening ideas.
+- `lib/strings.ts`: all FR / EN copy.
+- `lib/track.ts`: event tracking (PostHog).
 
-À faire : les liens du pied de page (mentions légales, CGU, confidentialité) pointent encore vers `#`.
+To do: the footer links (legal notice, terms, privacy) still point to `#`.

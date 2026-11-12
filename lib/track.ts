@@ -3,15 +3,15 @@
 import type { PostHog } from "posthog-js";
 
 /**
- * Suivi des événements du test marché.
+ * Market test event tracking. Full list in ANALYTICS.md.
  *
- * - Toujours : un compteur par événement dans localStorage (clé « tms-fd »), comme dans le prototype.
- * - Si NEXT_PUBLIC_POSTHOG_KEY est défini : l'événement est aussi envoyé à PostHog.
- *   Sans clé, rien ne quitte le navigateur.
+ * - Always: one counter per event in localStorage (key "tms-fd"), as in the prototype.
+ * - If NEXT_PUBLIC_POSTHOG_KEY is set: the event is also sent to PostHog.
+ *   Without a key, nothing leaves the browser.
  *
- * Événements : start_click, demo_send, lang_switch, story_created, with, intro, ideas_open, idea_use,
+ * Events: start_click, demo_send, lang_switch, story_created, with, intro, ideas_open, idea_use,
  * pay_click, email, email_error, email_declined, dialog_close, keep_shown, keep_copy.
- * Les erreurs JavaScript non interceptées sont aussi envoyées à PostHog (suivi des erreurs).
+ * Uncaught JavaScript errors are also sent to PostHog (error tracking).
  */
 
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -58,7 +58,7 @@ export function track(event: string, data: Record<string, unknown> = {}, lang?: 
   });
 }
 
-/** Envoie une erreur interceptée à PostHog (suivi des erreurs). */
+/** Sends a caught error to PostHog (error tracking). */
 export function trackError(error: unknown, data: Record<string, unknown> = {}) {
   initAnalytics().then((ph) => ph?.captureException(error, data));
 }

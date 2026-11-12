@@ -65,7 +65,7 @@ const fr = {
     "Ça y est, tout est prêt. Mon ventre se serre à l’idée de ce qui m’attend demain. Je glisse mon billet d’avion dans mon sac et monte me coucher.",
     "Aujourd’hui, une marque est apparue sur mon poignet. Je me souviendrai toute ma vie du regard d’effroi que ma mère a eu lorsqu’elle l’a découverte.",
   ],
-  // Parcours du test marché (« fake door »)
+  // Market test flow ("fake door")
   fd: {
     headLocked: "Votre histoire est prête",
     headWith: "Avec qui voulez-vous écrire ?",
@@ -213,7 +213,7 @@ export const STR: Record<Lang, Strings> = { fr, en };
 
 export const PERIODS = [3, 7, 14, 30];
 
-/** Temps restant compact : « 6j 23h », « 4h 12min », « 3min ». */
+/** Compact time left: "6d 23h", "4h 12min", "3min". */
 export function durLeft(L: Strings, ms: number): string {
   const DAY = 864e5, HOUR = 36e5, MIN = 6e4, U = L.units;
   if (ms <= 0) return L.outOfTime;
@@ -223,7 +223,7 @@ export function durLeft(L: Strings, ms: number): string {
   return `${Math.max(m, 1)}${U.m}`;
 }
 
-/** Découpe un texte en paragraphes ; un paragraphe commençant par une tabulation est indenté. */
+/** Splits a text into paragraphs; a paragraph starting with a tab is indented. */
 export function splitParas(text: string) {
   const s = String(text || ""), tabbed = s.includes("\t");
   return s
@@ -244,7 +244,7 @@ const secretNorm = (s: string) =>
     .trim() +
   " ";
 
-/** Petit secret caché dans l'histoire d'exemple. */
+/** Small secret hidden in the sample story. */
 export const isSecret = (s: string) => {
   const n = secretNorm(s);
   return n.includes(" emma ") && n.includes(" il savait ") && n.length < 400;

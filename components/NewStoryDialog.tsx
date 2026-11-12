@@ -9,14 +9,14 @@ import SuggestDialog from "./SuggestDialog";
 import TwoQuills from "./TwoQuills";
 
 /**
- * Parcours du test marché :
- *   main   → titre + durée d'un tour
- *   with   → prénom du coauteur
- *   intro  → début de l'histoire (avec idées de début)
- *   locked → « Votre histoire est prête », paywall factice 1,99 €
- *   sorry  → pas encore ouvert, collecte de l'e-mail
+ * Market test flow:
+ *   main   → title + turn length
+ *   with   → co-author's first name
+ *   intro  → story opening (with opening ideas)
+ *   locked → "Your story is ready", fake €1.99 paywall
+ *   sorry  → not open yet, email collection
  *   done   → confirmation
- *   keep   → à la fermeture : copier son début d'histoire
+ *   keep   → on close: copy your story opening
  */
 type Step = "main" | "with" | "intro" | "locked" | "sorry" | "done" | "keep";
 
@@ -49,7 +49,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
 
   const t = (event: string, data?: Record<string, unknown>) => track(event, data, lang);
 
-  // À chaque ouverture : formulaire neuf (le prénom et le début d'histoire sont conservés).
+  // Fresh form on every open (the co-author's name and the story opening are kept).
   useEffect(() => {
     if (!open) return;
     setStep("main");
