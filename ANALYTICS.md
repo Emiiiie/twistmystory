@@ -92,25 +92,6 @@ From `sorry` or `done`, if a story opening was written, closing does not close t
 
 "No thanks" sends `story_email_no_thanks_click` then `story_close_click` (`step: sorry`).
 
-#### Renamed events
-
-These events were renamed on 2026-11-12. Data sent before that date is under the old names in PostHog.
-
-| Old name | New name |
-| --- | --- |
-| `story_created` | `story_title_create_click` |
-| `with` | `story_partner_continue_click` |
-| `ideas_open` | `story_intro_ideas_click` |
-| `idea_use` | `story_ideas_choose_click` |
-| `intro` | `story_intro_continue_click` |
-| `pay_click` | `story_paywall_pay_click` |
-| `email_error` | `story_email_submit_invalid_click` |
-| `email` | `story_email_submit_click` |
-| `email_declined` | `story_email_no_thanks_click` |
-| `keep_copy` | `story_keep_copy_click` |
-| `dialog_close` | `story_close_click` |
-| `keep_shown` | removed: now `story_close_click` with `to_keep: true` |
-
 ## Identifying visitors
 
 - PostHog is configured with `person_profiles: "identified_only"`: a person profile is only created for identified visitors.

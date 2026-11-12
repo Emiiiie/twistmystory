@@ -42,7 +42,7 @@ Run `npm run lint` and `npm run build` before committing. There are no tests.
 
 - All events go through `track()` / `trackError()` in `lib/track.ts`. Never call `posthog` directly from components.
 - **When adding, renaming or removing an event, update `ANALYTICS.md`** — it is the reference list of events and properties.
-- Event names: `snake_case`. Click events end with `_click`; creation dialog events follow `story_<screen>_<button>_click` (`story_intro_continue_click`). Avoid renaming existing events (PostHog keeps old data under the old name); if the owner asks for it, do it and list the old → new names in `ANALYTICS.md`.
+- Event names: `snake_case`. Click events end with `_click`; creation dialog events follow `story_<screen>_<button>_click` (`story_intro_continue_click`). The site has no real users yet: when the owner asks to rename an event, rename it in the code and in `ANALYTICS.md`, without keeping or listing the old names.
 - PostHog is optional: with no `NEXT_PUBLIC_POSTHOG_KEY`, the site must keep working and send nothing.
 - Project is on PostHog EU cloud (`https://eu.i.posthog.com`). The `phc_…` key is public config, not a secret; never commit `.env.local` anyway.
 - Emails collected by the flow are only stored in PostHog (no database). Treat them as personal data.
