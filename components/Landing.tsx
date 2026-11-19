@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useLang } from "@/lib/i18n";
 import { durLeft, splitParas } from "@/lib/strings";
 import { initAnalytics, track } from "@/lib/track";
@@ -196,11 +196,10 @@ export default function Landing() {
               type="button"
               className="reveal-btn"
               onClick={reveal}
-              style={{ "--who": shown === 1 ? "var(--ink-julie)" : "var(--ink-you)" } as CSSProperties}
             >
               <span className="reveal-label">{shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}</span>
               <span className="reveal-arrow" aria-hidden="true">
-                →
+                ↓
               </span>
             </button>
           ) : (

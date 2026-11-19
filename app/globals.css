@@ -599,18 +599,18 @@ button {
   font-style: italic;
   border: 0;
   background: none;
-  color: var(--who);
+  color: #5d5294;
   cursor: pointer;
 }
 .reveal-label {
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
-  text-decoration-color: color-mix(in srgb, var(--who) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, #5d5294 45%, transparent);
   text-underline-offset: 5px;
   transition: text-decoration-color 0.2s ease;
 }
 .reveal-btn:hover .reveal-label {
-  text-decoration-color: var(--who);
+  text-decoration-color: #5d5294;
 }
 .reveal-arrow {
   display: inline-block;
@@ -620,10 +620,10 @@ button {
 @keyframes reveal-nudge {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translateY(0);
   }
   50% {
-    transform: translateX(4px);
+    transform: translateY(3px);
   }
 }
 .row-in {
