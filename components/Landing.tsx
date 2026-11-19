@@ -66,7 +66,7 @@ export default function Landing() {
       if (document.activeElement === el && el.selectionEnd >= el.value.length - 1 && bottom > limit)
         window.scrollBy({ top: bottom - limit });
     }
-  }, [draft, sent]);
+  }, [draft, sent, shown]);
 
   const insert = useCallback((text: string) => {
     const el = ta.current;
@@ -143,64 +143,38 @@ export default function Landing() {
       </header>
 
       <main style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <section className="concept">
-          <h1 className="lines-big">{W.concept}</h1>
-          <p className="tagline">{W.conceptSub}</p>
+        <section className="intro">
+          <p className="intro-text">{W.concept}</p>
+          <p className="intro-sub">{W.conceptSub}</p>
         </section>
 
-        <div className="sep" aria-hidden="false">
-          <i style={{ background: "linear-gradient(to right,transparent,rgba(28,30,42,.25))" }} />
-          <span className="sep-label">{W.exLabel}</span>
-          <i style={{ background: "linear-gradient(to left,transparent,rgba(28,30,42,.25))" }} />
-        </div>
-
-        <section className="demo" data-tms-story="" data-tms-demo="">
-          <h2 className="demo-title">{W.exTitle}</h2>
-          <div className="demo-meta">
-            <span>
-              <span className="dot" style={{ background: "var(--ink-you)" }} />
-              {W.authorA}
-            </span>
-            <span>
-              <span className="dot" style={{ background: "var(--ink-julie)" }} />
-              {W.authorB}
-            </span>
-            <span>{W.perWeek}</span>
-          </div>
-
-          <article className="article" data-tms-article="">
-            <div className="ch-head" data-tms-head="">
-              <div>
-                <span className="ch-num">{W.chapter}</span>
-                <span className="ch-title">{W.chTitle}</span>
-                <span className="ch-rule" />
-              </div>
-            </div>
-            {[
-              [W.d1, W.p1, "var(--ink-you)"],
-              [W.d2, W.p2, "var(--ink-julie)"],
-              [W.d3, W.p3, "var(--ink-you)"],
-            ].slice(0, Math.min(shown, 3)).map(([d, p, c]) => (
-              <div className="row row-in" data-tms-row="" key={d}>
-                <span className="row-date" data-tms-date="">
-                  {d}
+        <section className="demo story" data-tms-story="" data-tms-demo="">
+          {[
+            [W.authorA, W.p1, "var(--ink-you)"],
+            [W.authorB, W.p2, "var(--ink-julie)"],
+            [W.authorA, W.p3, "var(--ink-you)"],
+          ]
+            .slice(0, Math.min(shown, 3))
+            .map(([who, p, c], i) => (
+              <div className="turn row-in" key={i}>
+                <span className="turn-who" style={{ color: c }}>
+                  {who}
                 </span>
-                <p className="row-text" style={{ color: c }}>
-                  {p}
-                </p>
+                <p className="turn-text">{p}</p>
               </div>
             ))}
-            {paras.map((p, i) => (
-              <div className="row" data-tms-row="" key={"u" + i}>
-                <span className="row-date" data-tms-date="">
-                  {i ? "" : W.today}
-                </span>
-                <p className="row-text" style={{ color: "var(--ink-you)", textIndent: p.indent }}>
+          {paras.length > 0 && (
+            <div className="turn row-in">
+              <span className="turn-who" style={{ color: "var(--ink-julie)" }}>
+                {W.you}
+              </span>
+              {paras.map((p, i) => (
+                <p className="turn-text" key={i} style={{ color: "var(--ink-julie)", textIndent: p.indent }}>
                   {p.text}
                 </p>
-              </div>
-            ))}
-          </article>
+              ))}
+            </div>
+          )}
 
           {shown < 4 ? (
             <button type="button" className="reveal-btn" onClick={reveal}>
@@ -208,7 +182,7 @@ export default function Landing() {
               <span aria-hidden="true"> ↓</span>
             </button>
           ) : (
-          <div className="row-in" style={{ marginTop: 28, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
+          <div className="row-in" style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
             {!sent ? (
               <>
                 <div className="turn-label">
@@ -220,7 +194,7 @@ export default function Landing() {
                   <textarea
                     ref={ta}
                     className="editor"
-                    data-tms-editor=""
+                   
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     onKeyDown={onKey}
@@ -241,7 +215,7 @@ export default function Landing() {
                     </div>
                   )}
                 </div>
-                <div className="editor-bar" data-tms-editor="">
+                <div className="editor-bar">
                   <span style={{ fontSize: 12, color: "#6d7180", marginRight: "auto" }}>
                     {n ? `${n} ${n > 1 ? W.words : W.word}` : ""}
                   </span>
