@@ -390,12 +390,12 @@ button {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-you);
+  color: var(--ink-julie);
 }
 .turn-label > i {
   width: 28px;
   height: 0;
-  border-top: 1px solid var(--ink-you);
+  border-top: 1px solid var(--ink-julie);
   flex: none;
 }
 .rail {
@@ -404,7 +404,7 @@ button {
   bottom: 0;
   left: calc(var(--gutter) - 14px);
   width: 1px;
-  background: linear-gradient(to bottom, var(--ink-you), transparent);
+  background: linear-gradient(to bottom, var(--ink-julie), transparent);
   pointer-events: none;
 }
 .editor {
@@ -424,8 +424,8 @@ button {
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: var(--ink-you);
-  caret-color: var(--ink-you);
+  color: var(--ink-julie);
+  caret-color: var(--ink-julie);
   text-align: justify;
   hyphens: auto;
   outline: none;
