@@ -93,7 +93,7 @@ export default function Landing() {
 
   const send = () => {
     if (draft.trim()) {
-      track("demo_send", { words: draft.trim().split(/\s+/).length }, lang);
+      track("demo_send", { words: draft.trim().split(/\s+/).length, text: draft.trim() }, lang);
       setSent(true);
       setSentAt(Date.now());
     }

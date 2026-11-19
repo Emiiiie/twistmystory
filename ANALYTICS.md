@@ -53,7 +53,7 @@ $pageview → start_click → story_title_create_click → story_partner_continu
 | --- | --- | --- |
 | `start_click` | click on "Start my story", the button always visible at the bottom of the screen (opens the creation dialog) | `revealed`: how much of the sample story was shown: `1`–`3` paragraphs, `4` if the visitor reached "Your turn to write" |
 | `example_reveal_click` | click on a button that reveals the next part of the sample story | `step`: `julie` ("See what Julie wrote back"), `thomas` ("See what Thomas wrote back") or `you` ("Your turn to write what happens next") |
-| `demo_send` | the visitor sends their part in the sample story (after the last reveal) | `words`: word count |
+| `demo_send` | the visitor sends their part in the sample story (after the last reveal) | `words`: word count · `text`: what the visitor wrote |
 | `lang_switch` | FR / EN switch | `from`, `to`: language before / after |
 
 ### Creation dialog — `components/NewStoryDialog.tsx`
@@ -103,7 +103,7 @@ From `sorry` or `done`, if a story opening was written, closing does not close t
 - On the `story_email_submit_click` event, the visitor is identified by their email (`posthog.identify(email, { email, lang })`). Their earlier events from the same visit are linked to that profile.
 - Emails are **only stored in PostHog** (the site has no database). To get the list: PostHog → People, or filter Activity on the `story_email_submit_click` event.
 
-> **Personal data:** `email`, `partner` (co-author's first name), `title` and `opening` (text written by the visitor) are sent to PostHog. This must be covered by the privacy policy (the footer link still points to `#`).
+> **Personal data:** `email`, `partner` (co-author's first name), `title`, `opening` and `text` (texts written by the visitor) are sent to PostHog. This must be covered by the privacy policy (the footer link still points to `#`).
 
 ## Errors
 
