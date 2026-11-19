@@ -136,7 +136,7 @@ export default function Landing() {
         </button>
       </header>
 
-      <main style={{ maxWidth: 1000, margin: "0 auto" }}>
+      <main style={{ flex: 1, width: "100%", maxWidth: 1000, margin: "0 auto" }}>
         <section className="intro">
           <h1 className="intro-title">{W.howTitle}</h1>
           <p className="intro-text">
