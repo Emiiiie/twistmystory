@@ -136,7 +136,7 @@ export default function Landing() {
         </button>
       </header>
 
-      <main style={{ flex: 1, width: "100%", maxWidth: 1000, margin: "0 auto" }}>
+      <main style={{ width: "100%", maxWidth: 1000, margin: "0 auto" }}>
         <section className="intro">
           <h1 className="intro-title">{W.howTitle}</h1>
           <p className="intro-text">
@@ -198,8 +198,10 @@ export default function Landing() {
               onClick={reveal}
               style={{ "--who": shown === 1 ? "var(--ink-julie)" : "var(--ink-you)" } as CSSProperties}
             >
-              {shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}
-              <ChevronDown />
+              <span className="reveal-label">{shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}</span>
+              <span className="reveal-arrow" aria-hidden="true">
+                →
+              </span>
             </button>
           ) : (
           <div className="row-in" style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
@@ -275,13 +277,5 @@ export default function Landing() {
 
       <NewStoryDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
     </div>
-  );
-}
-
-function ChevronDown() {
-  return (
-    <svg className="reveal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="m6 9 6 6 6-6" />
-    </svg>
   );
 }

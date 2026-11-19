@@ -591,34 +591,39 @@ button {
 .reveal-btn {
   font: inherit;
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
-  margin: 18px 0 0 var(--gutter);
-  padding: 11px 18px;
-  font-size: 16px;
+  margin: 16px 0 0 var(--gutter);
+  padding: 6px 0;
+  font-size: 17px;
   font-style: italic;
-  border: 1.5px dashed color-mix(in srgb, var(--who) 55%, transparent);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--who) 8%, #ffffff);
+  border: 0;
+  background: none;
   color: var(--who);
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
-.reveal-btn:hover {
-  transform: translateY(-1px);
-  border-color: var(--who);
-  background: color-mix(in srgb, var(--who) 13%, #ffffff);
+.reveal-label {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--who) 45%, transparent);
+  text-underline-offset: 5px;
+  transition: text-decoration-color 0.2s ease;
+}
+.reveal-btn:hover .reveal-label {
+  text-decoration-color: var(--who);
 }
 .reveal-arrow {
+  display: inline-block;
+  font-style: normal;
   animation: reveal-nudge 1.6s ease-in-out infinite;
 }
 @keyframes reveal-nudge {
   0%,
   100% {
-    transform: translateY(-1px);
+    transform: translateX(0);
   }
   50% {
-    transform: translateY(3px);
+    transform: translateX(4px);
   }
 }
 .row-in {
@@ -635,11 +640,18 @@ button {
 .sticky-start {
   position: sticky;
   bottom: 0;
+  /* Sits right under the content; the free space goes below it, so the footer stays at the bottom. */
+  margin-bottom: auto;
   z-index: 5;
   display: flex;
   justify-content: center;
   padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
   background: linear-gradient(to bottom, transparent, var(--color-bg) 40%);
+}
+@media (min-width: 720px) {
+  .sticky-start {
+    background: none;
+  }
 }
 
 
