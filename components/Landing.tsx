@@ -22,6 +22,8 @@ export default function Landing() {
   const [sentAt, setSentAt] = useState(0);
   const [now, setNow] = useState(0);
   const [secret, setSecret] = useState(false);
+  // How much of the sample story is shown: 1–3 paragraphs, 4 = the visitor's turn to write.
+  const [shown, setShown] = useState(1);
   const ta = useRef<HTMLTextAreaElement>(null);
   const pendingCaret = useRef<number | null>(null);
 
@@ -113,9 +115,15 @@ export default function Landing() {
   const paras = sent ? splitParas(draft) : [];
   const clock = sent ? `${L.leftPrefix} ${durLeft(L, WEEK - Math.max(0, (now || Date.now()) - sentAt))}` : "";
 
-  const openNew = (position: "hero" | "closing") => {
-    track("start_click", { position }, lang);
+  const openNew = () => {
+    track("start_click", { revealed: shown }, lang);
     setDialogOpen(true);
+  };
+
+  const reveal = () => {
+    const step = shown === 1 ? "julie" : shown === 2 ? "thomas" : "you";
+    track("example_reveal_click", { step }, lang);
+    setShown(shown + 1);
   };
 
   const switchLang = () => {
@@ -135,30 +143,10 @@ export default function Landing() {
       </header>
 
       <main style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <section className="hero">
-          <span className="kicker">{W.kicker}</span>
-          <h1 className="hero-title">
-            Twist My <span style={{ fontStyle: "italic" }}>Story</span>
-          </h1>
-          <p className="tagline">{L.tagline}</p>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 14 }}>
-            <button type="button" className="cta" onClick={() => openNew("hero")}>
-              <PenIcon />
-              <span className="cta-label">{W.start}</span>
-            </button>
-          </div>
+        <section className="concept">
+          <h1 className="lines-big">{W.concept}</h1>
+          <p className="tagline">{W.conceptSub}</p>
         </section>
-
-        <div className="lines">
-          <p className="lines-big">
-            {W.line1}
-            <br />
-            {W.line2}
-          </p>
-          <p className="tagline" style={{ marginTop: -4 }}>
-            {W.question}
-          </p>
-        </div>
 
         <div className="sep" aria-hidden="false">
           <i style={{ background: "linear-gradient(to right,transparent,rgba(28,30,42,.25))" }} />
@@ -170,12 +158,12 @@ export default function Landing() {
           <h2 className="demo-title">{W.exTitle}</h2>
           <div className="demo-meta">
             <span>
-              <span className="dot" style={{ background: "var(--ink-julie)" }} />
-              {W.withJulie}
+              <span className="dot" style={{ background: "var(--ink-you)" }} />
+              {W.authorA}
             </span>
             <span>
-              <span className="dot" style={{ background: "var(--ink-you)" }} />
-              {W.you}
+              <span className="dot" style={{ background: "var(--ink-julie)" }} />
+              {W.authorB}
             </span>
             <span>{W.perWeek}</span>
           </div>
@@ -189,11 +177,11 @@ export default function Landing() {
               </div>
             </div>
             {[
-              [W.d1, W.p1, "var(--ink-julie)"],
-              [W.d2, W.p2, "var(--ink-you)"],
-              [W.d3, W.p3, "var(--ink-julie)"],
-            ].map(([d, p, c]) => (
-              <div className="row" data-tms-row="" key={d}>
+              [W.d1, W.p1, "var(--ink-you)"],
+              [W.d2, W.p2, "var(--ink-julie)"],
+              [W.d3, W.p3, "var(--ink-you)"],
+            ].slice(0, Math.min(shown, 3)).map(([d, p, c]) => (
+              <div className="row row-in" data-tms-row="" key={d}>
                 <span className="row-date" data-tms-date="">
                   {d}
                 </span>
@@ -214,7 +202,13 @@ export default function Landing() {
             ))}
           </article>
 
-          <div style={{ marginTop: 28, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
+          {shown < 4 ? (
+            <button type="button" className="reveal-btn" onClick={reveal}>
+              {shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}
+              <span aria-hidden="true"> ↓</span>
+            </button>
+          ) : (
+          <div className="row-in" style={{ marginTop: 28, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
             {!sent ? (
               <>
                 <div className="turn-label">
@@ -267,19 +261,17 @@ export default function Landing() {
               </div>
             )}
           </div>
+          )}
         </section>
 
-        <div className="closing-rule" />
-        <section className="closing" data-tms-close="">
-          <p className="lines-big" style={{ margin: "0 0 6px", fontSize: "clamp(26px,5vw,32px)" }}>
-            {W.closeQ}
-          </p>
-          <button type="button" className="cta" onClick={() => openNew("closing")}>
-            <PenIcon />
-            <span className="cta-label">{W.closeCta}</span>
-          </button>
-        </section>
       </main>
+
+      <div className="sticky-start">
+        <button type="button" className="cta" onClick={openNew}>
+          <PenIcon />
+          <span className="cta-label">{W.start}</span>
+        </button>
+      </div>
 
       <footer className="footer">
         <a href="#">{W.legal}</a>
