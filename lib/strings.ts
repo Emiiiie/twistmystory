@@ -10,7 +10,7 @@ const fr = {
   units: { d: "j", h: "h", m: "min" },
   welcome: {
     start: "Commencer mon histoire",
-    concept: "Vous écrivez un début d’histoire, votre ami le reçoit et imagine la suite. Puis, c’est de nouveau à vous, et ainsi de suite !",
+    concept: "Vous écrivez une histoire à deux avec un ami. Chacun à votre tour, vous imaginez la suite de l’histoire.",
     howTitle: "Comment ça marche ?",
     conceptQ: "Jusqu’où cela pourrait‑il vous mener ?",
     authorA: "Thomas",
@@ -106,7 +106,7 @@ const en: Strings = {
   units: { d: "d", h: "h", m: "m" },
   welcome: {
     start: "Start my story",
-    concept: "You write the beginning of a story, your friend gets it and imagines what happens next. Then it’s your turn again, and so on!",
+    concept: "You write a story together with a friend. Taking turns, you imagine what happens next.",
     howTitle: "How does it work?",
     conceptQ: "Where could it take you?",
     authorA: "Thomas",
