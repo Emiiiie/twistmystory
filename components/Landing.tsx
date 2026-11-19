@@ -144,37 +144,51 @@ export default function Landing() {
 
       <main style={{ maxWidth: 1000, margin: "0 auto" }}>
         <section className="intro">
-          <p className="intro-text">{W.concept}</p>
-          <p className="intro-sub">{W.conceptSub}</p>
+          <h1 className="intro-title">{W.concept}</h1>
+          <p className="intro-text">{W.conceptSub}</p>
+          <p className="intro-lead">{W.lead}</p>
         </section>
 
-        <section className="demo story" data-tms-story="" data-tms-demo="">
-          {[
-            [W.authorA, W.p1, "var(--ink-you)"],
-            [W.authorB, W.p2, "var(--ink-julie)"],
-            [W.authorA, W.p3, "var(--ink-you)"],
-          ]
-            .slice(0, Math.min(shown, 3))
-            .map(([who, p, c], i) => (
-              <div className="turn row-in" key={i}>
-                <span className="turn-who" style={{ color: c }}>
-                  {who}
+        <section className="demo" data-tms-story="" data-tms-demo="">
+          <div className="demo-meta">
+            <span>
+              <span className="dot" style={{ background: "var(--ink-you)" }} />
+              {W.authorA}
+            </span>
+            <span>
+              <span className="dot" style={{ background: "var(--ink-julie)" }} />
+              {W.authorB}
+            </span>
+          </div>
+
+          <article className="article" data-tms-article="">
+            {[
+              [W.d1, W.p1, "var(--ink-you)"],
+              [W.d2, W.p2, "var(--ink-julie)"],
+              [W.d3, W.p3, "var(--ink-you)"],
+            ]
+              .slice(0, Math.min(shown, 3))
+              .map(([d, p, c]) => (
+                <div className="row row-in" data-tms-row="" key={d}>
+                  <span className="row-date" data-tms-date="">
+                    {d}
+                  </span>
+                  <p className="row-text" style={{ color: c }}>
+                    {p}
+                  </p>
+                </div>
+              ))}
+            {paras.map((p, i) => (
+              <div className="row row-in" data-tms-row="" key={"u" + i}>
+                <span className="row-date" data-tms-date="">
+                  {i ? "" : W.today}
                 </span>
-                <p className="turn-text">{p}</p>
-              </div>
-            ))}
-          {paras.length > 0 && (
-            <div className="turn row-in">
-              <span className="turn-who" style={{ color: "var(--ink-julie)" }}>
-                {W.you}
-              </span>
-              {paras.map((p, i) => (
-                <p className="turn-text" key={i} style={{ color: "var(--ink-julie)", textIndent: p.indent }}>
+                <p className="row-text" style={{ color: "var(--ink-julie)", textIndent: p.indent }}>
                   {p.text}
                 </p>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </article>
 
           {shown < 4 ? (
             <button type="button" className="reveal-btn" onClick={reveal}>
