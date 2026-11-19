@@ -589,21 +589,20 @@ button {
   align-items: center;
   gap: 8px;
   margin: 18px 0 0 var(--gutter);
-  padding: 11px 20px;
+  padding: 11px 18px;
   font-size: 16px;
   font-style: italic;
-  border: 1.5px solid color-mix(in srgb, var(--who) 40%, transparent);
-  border-radius: 999px;
-  background: #fffdf8;
+  border: 1.5px dashed color-mix(in srgb, var(--who) 55%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--who) 8%, #ffffff);
   color: var(--who);
-  box-shadow: 0 3px 12px color-mix(in srgb, var(--who) 16%, transparent);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 .reveal-btn:hover {
   transform: translateY(-1px);
   border-color: var(--who);
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--who) 24%, transparent);
+  background: color-mix(in srgb, var(--who) 13%, #ffffff);
 }
 .reveal-arrow {
   animation: reveal-nudge 1.6s ease-in-out infinite;

@@ -10,7 +10,7 @@ const fr = {
   units: { d: "j", h: "h", m: "min" },
   welcome: {
     start: "Commencer mon histoire",
-    concept: "Vous écrivez une histoire à deux avec un ami. Chacun à votre tour, vous imaginez la suite de l’histoire.",
+    concept: "Vous écrivez une histoire à deux avec un ami. Chacun à votre tour, vous imaginez la suite.",
     howTitle: "Comment ça marche ?",
     conceptQ: "Jusqu’où cela pourrait‑il vous mener ?",
     authorA: "Thomas",
