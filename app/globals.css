@@ -513,13 +513,24 @@ button {
   line-height: 1.5;
   color: #3a3632;
 }
-.intro-lead {
-  margin: 18px 0 0;
-  font-size: 16px;
-  font-style: italic;
-  color: #5c5750;
-}
 
+.sep {
+  margin: clamp(32px, 7vw, 56px) clamp(16px, 5vw, 56px) 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.sep > i {
+  flex: 1;
+  height: 1px;
+}
+.sep-label {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #5c5750;
+  text-align: center;
+}
 .demo-meta {
   display: flex;
   flex-wrap: wrap;
@@ -576,20 +587,23 @@ button {
   font: inherit;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin: 18px 0 0 var(--gutter);
-  padding: 10px 16px;
-  font-size: 15px;
+  padding: 11px 20px;
+  font-size: 16px;
   font-style: italic;
-  border: 1px dashed color-mix(in srgb, var(--who) 45%, transparent);
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--who) 7%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--who) 40%, transparent);
+  border-radius: 999px;
+  background: #fffdf8;
   color: var(--who);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--who) 16%, transparent);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .reveal-btn:hover {
-  background: color-mix(in srgb, var(--who) 13%, transparent);
+  transform: translateY(-1px);
+  border-color: var(--who);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--who) 24%, transparent);
 }
 .reveal-arrow {
   animation: reveal-nudge 1.6s ease-in-out infinite;

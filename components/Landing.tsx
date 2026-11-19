@@ -142,8 +142,13 @@ export default function Landing() {
           <p className="intro-text">
             {W.concept} <em>{W.conceptQ}</em>
           </p>
-          <p className="intro-lead">{W.lead}</p>
         </section>
+
+        <div className="sep">
+          <i style={{ background: "linear-gradient(to right,transparent,rgba(28,30,42,.25))" }} />
+          <span className="sep-label">{W.exLabel}</span>
+          <i style={{ background: "linear-gradient(to left,transparent,rgba(28,30,42,.25))" }} />
+        </div>
 
         <section className="demo" data-tms-story="" data-tms-demo="">
           <div className="demo-meta">
@@ -193,7 +198,6 @@ export default function Landing() {
               onClick={reveal}
               style={{ "--who": shown === 1 ? "var(--ink-julie)" : "var(--ink-you)" } as CSSProperties}
             >
-              {shown < 3 && <span className="dot" style={{ background: "var(--who)" }} />}
               {shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}
               <ChevronDown />
             </button>
