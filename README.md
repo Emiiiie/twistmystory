@@ -4,8 +4,8 @@ Next.js site (App Router, TypeScript) built from the "Twist My Story — Market 
 
 ## The flow
 
-1. **Landing page**: introduction, the sample story "The Roommate" where visitors can write the next part (draft kept in the browser), FR / EN switch.
-2. **"Start writing"** opens the creation dialog: title (or "later") and turn length.
+1. **Landing page**: "How does it work?" explanation, then a sample story revealed one turn at a time ("See what Julie wrote back"), after which visitors can write the next part (draft kept in the browser). FR / EN switch.
+2. **"Start my story"** (always visible at the bottom of the screen on phones) opens the creation dialog: title (optional) and turn length.
 3. **Co-author**: first name of the person to write with.
 4. **Story opening**, with a carousel of "opening ideas".
 5. **Fake paywall**: "Open my story for €1.99".
