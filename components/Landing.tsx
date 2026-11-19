@@ -198,9 +198,6 @@ export default function Landing() {
               onClick={reveal}
             >
               <span className="reveal-label">{shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}</span>
-              <span className="reveal-arrow" aria-hidden="true">
-                ↓
-              </span>
             </button>
           ) : (
           <div className="row-in" style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>

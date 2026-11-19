@@ -612,20 +612,6 @@ button {
 .reveal-btn:hover .reveal-label {
   text-decoration-color: #5d5294;
 }
-.reveal-arrow {
-  display: inline-block;
-  font-style: normal;
-  animation: reveal-nudge 1.6s ease-in-out infinite;
-}
-@keyframes reveal-nudge {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
-}
 .row-in {
   animation: row-in 0.45s ease both;
 }

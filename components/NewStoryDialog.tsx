@@ -42,7 +42,6 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
   const [suggest, setSuggest] = useState<number | null>(null);
   const [suggestIdx, setSuggestIdx] = useState<number | null>(null);
 
-  const partnerInput = useRef<HTMLInputElement>(null);
   const dlg = useRef<HTMLDivElement>(null);
   const keepRef = useRef<HTMLDivElement>(null);
   const draftId = useRef("");
@@ -97,11 +96,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
 
   const goWith = () => {
     const p = partner.trim();
-    // The button always looks active; with no name yet, just send the visitor back to the field.
-    if (!p) {
-      partnerInput.current?.focus();
-      return;
-    }
+    if (!p) return;
     t("story_partner_continue_click", { partner: p });
     setStep("intro");
   };
@@ -305,7 +300,6 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                         type="text"
                         autoComplete="off"
                         className="field-input lg"
-                        ref={partnerInput}
                         value={partner}
                         placeholder={F.introNamePh}
                         onChange={(e) => setPartner(e.target.value)}
@@ -314,7 +308,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
                       />
                     </label>
                   </div>
-                  <button type="button" className="pill-cta" onClick={goWith}>
+                  <button type="button" className="pill-cta" onClick={goWith} disabled={!partner.trim()}>
                     <span className="pill-cta-label">{F.introGo}</span>
                   </button>
                 </>
