@@ -499,17 +499,18 @@ button {
 }
 
 .intro-title {
-  margin: 0;
+  margin: 0 0 12px;
   font-family: var(--font-fell);
   font-weight: 400;
-  font-size: clamp(30px, 6vw, 40px);
-  line-height: 1.1;
+  font-size: clamp(26px, 5vw, 34px);
+  line-height: 1.15;
   color: var(--ink-brown);
 }
 .intro-text {
-  margin: 12px 0 0;
-  font-size: clamp(17px, 2.4vw, 19px);
-  line-height: 1.55;
+  margin: 0;
+  font-size: clamp(18px, 2.6vw, 21px);
+  font-weight: 400;
+  line-height: 1.5;
   color: #3a3632;
 }
 .intro-lead {
@@ -573,18 +574,34 @@ button {
 
 .reveal-btn {
   font: inherit;
-  display: block;
-  margin: 16px 0 0 var(--gutter);
-  padding: 10px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 0 var(--gutter);
+  padding: 10px 16px;
   font-size: 15px;
-  border: 1px solid #5d5294;
-  border-radius: 999px;
-  background: #fffdf8;
-  color: #5d5294;
+  font-style: italic;
+  border: 1px dashed color-mix(in srgb, var(--who) 45%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--who) 7%, transparent);
+  color: var(--who);
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 .reveal-btn:hover {
-  background: #f5f4ff;
+  background: color-mix(in srgb, var(--who) 13%, transparent);
+}
+.reveal-arrow {
+  animation: reveal-nudge 1.6s ease-in-out infinite;
+}
+@keyframes reveal-nudge {
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
 }
 .row-in {
   animation: row-in 0.45s ease both;
@@ -751,26 +768,6 @@ button {
   white-space: pre-wrap;
   user-select: text;
   -webkit-user-select: text;
-}
-
-/* ---------- Easter egg ---------- */
-
-.secret {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-  overflow: hidden;
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    color-mix(in srgb, var(--color-accent) 22%, var(--color-bg)) 0%,
-    var(--color-bg) 72%
-  );
-  cursor: pointer;
-  animation: tms-type 0.6s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {

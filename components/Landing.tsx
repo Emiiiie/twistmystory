@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { useLang } from "@/lib/i18n";
-import { durLeft, isSecret, splitParas } from "@/lib/strings";
+import { durLeft, splitParas } from "@/lib/strings";
 import { initAnalytics, track } from "@/lib/track";
 import { PenIcon } from "./icons";
 import NewStoryDialog from "./NewStoryDialog";
-import SecretOverlay from "./SecretOverlay";
 
 const WEEK = 7 * 864e5;
 const DRAFT_KEY = "tms-wdraft";
@@ -21,7 +20,6 @@ export default function Landing() {
   const [sent, setSent] = useState(false);
   const [sentAt, setSentAt] = useState(0);
   const [now, setNow] = useState(0);
-  const [secret, setSecret] = useState(false);
   // How much of the sample story is shown: 1–3 paragraphs, 4 = the visitor's turn to write.
   const [shown, setShown] = useState(1);
   const ta = useRef<HTMLTextAreaElement>(null);
@@ -94,10 +92,6 @@ export default function Landing() {
   };
 
   const send = () => {
-    if (isSecret(draft)) {
-      setSecret(true);
-      return;
-    }
     if (draft.trim()) {
       track("demo_send", { words: draft.trim().split(/\s+/).length }, lang);
       setSent(true);
@@ -144,8 +138,10 @@ export default function Landing() {
 
       <main style={{ maxWidth: 1000, margin: "0 auto" }}>
         <section className="intro">
-          <h1 className="intro-title">{W.concept}</h1>
-          <p className="intro-text">{W.conceptSub}</p>
+          <h1 className="intro-title">{W.howTitle}</h1>
+          <p className="intro-text">
+            {W.concept} <em>{W.conceptQ}</em>
+          </p>
           <p className="intro-lead">{W.lead}</p>
         </section>
 
@@ -191,9 +187,15 @@ export default function Landing() {
           </article>
 
           {shown < 4 ? (
-            <button type="button" className="reveal-btn" onClick={reveal}>
+            <button
+              type="button"
+              className="reveal-btn"
+              onClick={reveal}
+              style={{ "--who": shown === 1 ? "var(--ink-julie)" : "var(--ink-you)" } as CSSProperties}
+            >
+              {shown < 3 && <span className="dot" style={{ background: "var(--who)" }} />}
               {shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}
-              <span aria-hidden="true"> ↓</span>
+              <ChevronDown />
             </button>
           ) : (
           <div className="row-in" style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
@@ -268,16 +270,14 @@ export default function Landing() {
       </footer>
 
       <NewStoryDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
-
-      {secret && (
-        <SecretOverlay
-          onClose={() => {
-            setSecret(false);
-            setSent(true);
-            setSentAt(Date.now());
-          }}
-        />
-      )}
     </div>
+  );
+}
+
+function ChevronDown() {
+  return (
+    <svg className="reveal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   );
 }

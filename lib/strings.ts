@@ -10,11 +10,12 @@ const fr = {
   units: { d: "j", h: "h", m: "min" },
   welcome: {
     start: "Commencer mon histoire",
-    concept: "Écrivez une histoire à deux, chacun son tour.",
-    conceptSub: "Vous lancez le début. Votre ami reçoit votre texte et imagine la suite. Puis l’histoire vous revient… et aucun de vous deux ne sait où elle va vous emmener.",
+    concept: "Vous écrivez un début d’histoire. Votre ami le reçoit et écrit la suite. Puis, c’est de nouveau à vous, et ainsi de suite !",
+    howTitle: "Comment ça marche ?",
+    conceptQ: "Jusqu’où cela pourrait-il vous mener ?",
     authorA: "Thomas",
     authorB: "Julie",
-    lead: "Voici comment Thomas et Julie ont commencé la leur :",
+    lead: "Voici un exemple d’histoire à quatre mains :",
     d1: "2 sept.",
     d2: "5 sept.",
     d3: "hier",
@@ -91,11 +92,6 @@ const fr = {
     donePost: " dès le lancement. Vous trouverez dans ce mail le lien pour commencer votre histoire gratuitement !",
     close: "Fermer",
   },
-  secret: {
-    bravo: "Bravo !",
-    quote: "« Certaines portes ne s’ouvrent qu’une fois qu’on a osé frapper. »",
-    tap: "Touchez n’importe où pour revenir",
-  },
 };
 
 export type Strings = typeof fr;
@@ -110,11 +106,12 @@ const en: Strings = {
   units: { d: "d", h: "h", m: "m" },
   welcome: {
     start: "Start my story",
-    concept: "Write a story together, one turn each.",
-    conceptSub: "You write the beginning. Your friend gets your text and imagines what happens next. Then the story comes back to you… and neither of you knows where it will take you.",
+    concept: "You write the beginning of a story. Your friend gets it and writes what happens next. Then it’s your turn again, and so on!",
+    howTitle: "How does it work?",
+    conceptQ: "Where could it take you?",
     authorA: "Thomas",
     authorB: "Julie",
-    lead: "Here’s how Thomas and Julie started theirs:",
+    lead: "Here’s an example of a four-handed story:",
     d1: "Sep 2",
     d2: "Sep 5",
     d3: "yesterday",
@@ -190,11 +187,6 @@ const en: Strings = {
     donePost: " at launch. Inside, you’ll find the link to start your story for free!",
     close: "Close",
   },
-  secret: {
-    bravo: "Well done!",
-    quote: "“Some doors only open once you’ve dared to knock.”",
-    tap: "Tap anywhere to go back",
-  },
 };
 
 export const STR: Record<Lang, Strings> = { fr, en };
@@ -220,20 +212,3 @@ export function splitParas(text: string) {
     .filter((p) => p.text)
     .map((p) => ({ text: p.text, indent: p.ind ? "1.6em" : "0px" }));
 }
-
-const secretNorm = (s: string) =>
-  " " +
-  (s || "")
-    .toLowerCase()
-    .replace(/œ/g, "oe")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim() +
-  " ";
-
-/** Small secret hidden in the sample story. */
-export const isSecret = (s: string) => {
-  const n = secretNorm(s);
-  return n.includes(" emma ") && n.includes(" il savait ") && n.length < 400;
-};
