@@ -83,11 +83,13 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
   if (!open) return null;
 
   const share = step !== "main";
+  const ctaOff = !(later || title.trim());
   const dlgStyle: CSSProperties = {
     minHeight: share && minH && step !== "keep" && step !== "done" ? minH : undefined,
   };
 
   const submitMain = () => {
+    if (ctaOff) return;
     setMinH(dlg.current ? dlg.current.offsetHeight : 0);
     setBackAnim(false);
     setStep("with");
@@ -254,7 +256,7 @@ export default function NewStoryDialog({ open, onClose }: { open: boolean; onClo
               </div>
 
               <div className="sticky-foot">
-                <button type="button" className="pill-cta" onClick={submitMain} style={{ minHeight: 48 }}>
+                <button type="button" className="pill-cta" onClick={submitMain} disabled={ctaOff} style={{ minHeight: 48 }}>
                   <PenIcon />
                   <span className="pill-cta-label">{L.nhCtaLink}</span>
                 </button>

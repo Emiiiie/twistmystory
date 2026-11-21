@@ -80,6 +80,7 @@ body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var
 a{color:var(--color-accent)} a:hover{color:var(--color-accent-400)}
 @keyframes tms-breathe{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
 @keyframes tms-type{from{opacity:0}to{opacity:1}}
+@keyframes tms-secret{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
 @keyframes tms-rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .input:disabled{opacity:.7;cursor:default}
 .input:disabled:hover{border-color:var(--color-divider)}

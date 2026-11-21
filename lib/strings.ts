@@ -4,34 +4,39 @@ const fr = {
   locale: "fr-FR",
   langLabel: "EN",
   switchLang: "Switch to English",
+  tagline: "Deux plumes, une histoire, sans retour en arrière.",
   yourTurn: "Votre tour",
   leftPrefix: "Reste",
   outOfTime: "Temps écoulé",
   units: { d: "j", h: "h", m: "min" },
   welcome: {
-    start: "Commencer mon histoire",
-    concept: "Vous écrivez une histoire à deux avec un ami. Chacun à votre tour, vous imaginez la suite.",
-    howTitle: "Comment ça marche ?",
-    conceptQ: "Jusqu’où cela pourrait‑il vous mener ?",
-    authorA: "Thomas",
-    authorB: "Julie",
+    kicker: "Un roman à quatre mains",
+    start: "Commencer à écrire",
+    line1: "Chacun votre tour,",
+    line2: "vous écrivez la suite de l’histoire.",
+    question: "Qui sait où cela pourrait vous mener ?",
     exLabel: "Un exemple d’histoire",
+    exTitle: "Le colocataire",
+    withJulie: "avec Julie, votre amie",
+    you: "vous",
+    perWeek: "1 semaine par tour",
+    chapter: "Chapitre 1",
+    chTitle: "Le contrat",
     d1: "2 sept.",
     d2: "5 sept.",
     d3: "hier",
     today: "auj.",
-    revealB: "Voir ce que Julie a répondu",
-    revealA: "Voir ce que Thomas a répondu",
-    revealYou: "À vous d’écrire la suite",
-    p1: "Je regarde ma montre, une bouffée de panique m’envahit. Je rassemble mes affaires en vitesse et cours aussi vite que je le peux, mais trop tard : le train démarre…",
-    p2: "C’est la deuxième fois cette semaine. Si je ne passais pas mes nuits à réfléchir à ce que cette proposition signifie, je n’aurais pas tant de mal à partir à l’heure. Je frotte le givre avant de m’asseoir sur un banc de la gare de campagne. Je me demande combien de temps encore je vais faire ce trajet chaque jour.",
-    p3: "Cela fait maintenant cinq ans que j’enseigne dans ce petit village. Il est si reculé qu’on s’y croirait presque à une autre époque. Pas de route, pas d’électricité, pas d’Internet, seulement de l’eau courante. Cela me surprendra toujours de voir ces enfants arriver, le sourire aux lèvres, sans se douter qu’un autre monde existe. Plus le temps passe et plus je me demande pourquoi j’ai accepté de participer à cette expérience. J’étais loin de me douter de l’ampleur que cela prendrait.",
+    p1: "Le loyer était ridicule, l’appartement lumineux, et l’annonce ne posait qu’une condition : ne jamais entrer dans la chambre du fond. Emma signa le soir même.",
+    p2: "Son colocataire, Hugo, était parfait. Discret, drôle, il laissait chaque matin des croissants sur la table. Elle ne le croisait presque jamais, mais elle l’entendait rire, le soir, derrière la porte du fond.",
+    p3: "Un jeudi, la porte était entrouverte. Emma ne put s’en empêcher. Sur le bureau, il y avait un carnet ouvert, et en haut de la page, de l’écriture de Hugo : « Jour 41. Elle ne se doute toujours de rien. »",
     placeholder: "À vous d’écrire la suite !",
     send: "Valider",
     word: "mot",
     words: "mots",
-    handOff: "À Thomas d’écrire la suite",
+    handOff: "À Julie d’écrire la suite",
     rewrite: "Réécrire",
+    closeQ: "Et vous, quelle serait votre première phrase ?",
+    closeCta: "Commencer votre propre histoire",
     legal: "Mentions légales",
     terms: "Conditions d’utilisation",
     privacy: "Confidentialité et cookies",
@@ -92,6 +97,11 @@ const fr = {
     donePost: " dès le lancement. Vous trouverez dans ce mail le lien pour commencer votre histoire gratuitement !",
     close: "Fermer",
   },
+  secret: {
+    bravo: "Bravo !",
+    quote: "« Certaines portes ne s’ouvrent qu’une fois qu’on a osé frapper. »",
+    tap: "Touchez n’importe où pour revenir",
+  },
 };
 
 export type Strings = typeof fr;
@@ -100,34 +110,39 @@ const en: Strings = {
   locale: "en-US",
   langLabel: "FR",
   switchLang: "Passer en français",
+  tagline: "Two pens, one story, no take-backs.",
   yourTurn: "Your turn",
   leftPrefix: "Left",
   outOfTime: "Out of time",
   units: { d: "d", h: "h", m: "m" },
   welcome: {
-    start: "Start my story",
-    concept: "You write a story together with a friend. Taking turns, you imagine what happens next.",
-    howTitle: "How does it work?",
-    conceptQ: "Where could it take you?",
-    authorA: "Thomas",
-    authorB: "Julie",
+    kicker: "A novel for four hands",
+    start: "Start writing",
+    line1: "Taking turns,",
+    line2: "you write what happens next.",
+    question: "Who knows where it might take you?",
     exLabel: "An example story",
+    exTitle: "The Roommate",
+    withJulie: "with Julie, your friend",
+    you: "you",
+    perWeek: "1 week per turn",
+    chapter: "Chapter 1",
+    chTitle: "The Lease",
     d1: "Sep 2",
     d2: "Sep 5",
     d3: "yesterday",
     today: "today",
-    revealB: "See what Julie wrote back",
-    revealA: "See what Thomas wrote back",
-    revealYou: "Your turn to write what happens next",
-    p1: "I look at my watch and a wave of panic washes over me. I grab my things and run as fast as I can, but too late: the train is pulling out…",
-    p2: "That’s the second time this week. If I didn’t spend my nights wondering what that offer really means, I wouldn’t find it so hard to leave on time. I brush the frost off a bench in the little country station and sit down. I wonder how much longer I’ll be making this trip every day.",
-    p3: "I’ve been teaching in this little village for five years now. It’s so remote you could almost believe you’re in another century. No road, no electricity, no Internet, just running water. It never stops surprising me to see these children arrive with a smile, without the slightest idea that another world exists. The more time goes by, the more I wonder why I agreed to take part in this experiment. I had no idea how far it would go.",
+    p1: "The rent was absurdly low, the flat full of light, and the listing set only one condition: never go into the back bedroom. Emma signed that same evening.",
+    p2: "Her roommate, Hugo, was perfect. Quiet, funny, he left croissants on the table every morning. She hardly ever saw him, but in the evenings she could hear him laughing behind the back door.",
+    p3: "One Thursday, the door was ajar. Emma couldn’t help herself. On the desk lay an open notebook, and at the top of the page, in Hugo’s handwriting: “Day 41. She still suspects nothing.”",
     placeholder: "Your turn to write what happens next!",
     send: "Commit",
     word: "word",
     words: "words",
-    handOff: "Thomas’s turn to write what happens next",
+    handOff: "Julie’s turn to write what happens next",
     rewrite: "Rewrite",
+    closeQ: "And you, what would your first line be?",
+    closeCta: "Start your own story",
     legal: "Legal notice",
     terms: "Terms of use",
     privacy: "Privacy & cookies",
@@ -187,6 +202,11 @@ const en: Strings = {
     donePost: " at launch. Inside, you’ll find the link to start your story for free!",
     close: "Close",
   },
+  secret: {
+    bravo: "Well done!",
+    quote: "“Some doors only open once you’ve dared to knock.”",
+    tap: "Tap anywhere to go back",
+  },
 };
 
 export const STR: Record<Lang, Strings> = { fr, en };
@@ -212,3 +232,20 @@ export function splitParas(text: string) {
     .filter((p) => p.text)
     .map((p) => ({ text: p.text, indent: p.ind ? "1.6em" : "0px" }));
 }
+
+const secretNorm = (s: string) =>
+  " " +
+  (s || "")
+    .toLowerCase()
+    .replace(/œ/g, "oe")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim() +
+  " ";
+
+/** Small secret hidden in the sample story. */
+export const isSecret = (s: string) => {
+  const n = secretNorm(s);
+  return n.includes(" emma ") && n.includes(" il savait ") && n.length < 400;
+};

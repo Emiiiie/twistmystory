@@ -319,9 +319,6 @@ button {
 
 .page {
   min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 15px;
@@ -340,8 +337,6 @@ button {
 }
 
 .topbar {
-  width: 100%;
-  box-sizing: border-box;
   max-width: 1000px;
   margin: 0 auto;
   display: flex;
@@ -362,18 +357,99 @@ button {
   padding: 6px 10px;
 }
 
+.hero {
+  padding: clamp(48px, 10vw, 88px) clamp(16px, 5vw, 56px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 22px;
+}
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #5d5294;
+}
+.hero-title {
+  margin: 0;
+  font-family: var(--font-fell);
+  font-weight: 400;
+  font-size: clamp(48px, 11vw, 84px);
+  line-height: 1;
+  color: var(--ink-brown);
+}
+.tagline {
+  margin: 0;
+  font-size: clamp(18px, 3vw, 22px);
+  font-style: italic;
+  color: #3a3632;
+}
 
+.lines {
+  margin: clamp(40px, 8vw, 60px) 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.lines-big {
+  margin: 0;
+  font-family: var(--font-fell);
+  font-size: clamp(24px, 4.6vw, 34px);
+  line-height: 1.15;
+  color: var(--ink-brown);
+  text-wrap: balance;
+}
 
-
+.sep {
+  margin: 64px clamp(16px, 5vw, 56px) 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.sep > i {
+  flex: 1;
+  height: 1px;
+}
+.sep-label {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #5c5750;
+  text-align: center;
+}
 
 .demo {
   max-width: 800px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 20px clamp(16px, 4vw, 48px) 40px;
+  padding: 36px clamp(16px, 4vw, 48px) 40px;
   font-family: var(--font-body);
   --gutter: calc(72px + clamp(20px, 5vw, 56px));
   --measure: min(664px, calc(min(800px, 100vw) - 2 * clamp(16px, 4vw, 48px) - var(--gutter) - 36px));
+}
+.demo-title {
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(28px, 5vw, 36px);
+  letter-spacing: -0.01em;
+}
+.demo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  font-size: 13px;
+  color: #5b5f6d;
+  margin-bottom: 8px;
+}
+.demo-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .dot {
   width: 9px;
@@ -382,6 +458,69 @@ button {
   border-radius: 50%;
 }
 
+.article {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: 72px var(--measure);
+  gap: 0 clamp(20px, 5vw, 56px);
+  align-items: baseline;
+}
+.ch-head {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 34px 0 22px;
+}
+.ch-head > div {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+.ch-num {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6d7180;
+}
+.ch-title {
+  font-family: var(--font-fell);
+  font-size: 26px;
+  line-height: 1.2;
+}
+.ch-rule {
+  width: 44px;
+  height: 1px;
+  margin-top: 4px;
+  background: #5d5294;
+}
+.row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+.row-date {
+  grid-column: 1;
+  font-size: 11px;
+  line-height: 1.58;
+  text-align: right;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #7c8093;
+  padding-top: 5px;
+  white-space: nowrap;
+}
+.row-text {
+  grid-column: 2;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.58;
+  text-indent: 1.6em;
+  text-align: justify;
+  hyphens: auto;
+}
 
 .turn-label {
   display: flex;
@@ -390,12 +529,12 @@ button {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-julie);
+  color: var(--ink-you);
 }
 .turn-label > i {
   width: 28px;
   height: 0;
-  border-top: 1px solid var(--ink-julie);
+  border-top: 1px solid var(--ink-you);
   flex: none;
 }
 .rail {
@@ -404,7 +543,7 @@ button {
   bottom: 0;
   left: calc(var(--gutter) - 14px);
   width: 1px;
-  background: linear-gradient(to bottom, var(--ink-julie), transparent);
+  background: linear-gradient(to bottom, var(--ink-you), transparent);
   pointer-events: none;
 }
 .editor {
@@ -424,8 +563,8 @@ button {
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: var(--ink-julie);
-  caret-color: var(--ink-julie);
+  color: var(--ink-you);
+  caret-color: var(--ink-you);
   text-align: justify;
   hyphens: auto;
   outline: none;
@@ -496,150 +635,27 @@ button {
   color: #5d5294;
 }
 
-.intro {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: clamp(28px, 6vw, 56px) clamp(16px, 4vw, 48px) 0;
-  box-sizing: border-box;
+.closing-rule {
+  margin: 0 clamp(16px, 5vw, 56px);
+  height: 0;
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      rgba(28, 30, 42, 0.25) 30%,
+      rgba(28, 30, 42, 0.25) 70%,
+      transparent
+    )
+    1;
 }
-
-.intro-title {
-  margin: 0 0 12px;
-  font-family: var(--font-fell);
-  font-weight: 400;
-  font-size: clamp(26px, 5vw, 34px);
-  line-height: 1.15;
-  color: var(--ink-brown);
-}
-.intro-text {
-  margin: 0;
-  font-size: clamp(18px, 2.6vw, 21px);
-  font-weight: 400;
-  line-height: 1.5;
-  color: #3a3632;
-}
-
-.sep {
-  margin: clamp(32px, 7vw, 56px) clamp(16px, 5vw, 56px) 0;
+.closing {
+  padding: 28px clamp(16px, 5vw, 56px) 56px;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 16px;
 }
-.sep > i {
-  flex: 1;
-  height: 1px;
-}
-.sep-label {
-  font-size: 12px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #5c5750;
-  text-align: center;
-}
-.demo-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 18px;
-  font-size: 13px;
-  color: #5b5f6d;
-  margin-bottom: 8px;
-}
-
-.demo-meta > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.article {
-  container-type: inline-size;
-  display: grid;
-  grid-template-columns: 72px var(--measure);
-  gap: 0 clamp(20px, 5vw, 56px);
-  align-items: baseline;
-}
-
-.row {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-}
-
-.row-date {
-  grid-column: 1;
-  font-size: 11px;
-  line-height: 1.58;
-  text-align: right;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #7c8093;
-  padding-top: 5px;
-  white-space: nowrap;
-}
-
-.row-text {
-  grid-column: 2;
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.58;
-  text-indent: 1.6em;
-  text-align: justify;
-  hyphens: auto;
-}
-
-.reveal-btn {
-  font: inherit;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
-  margin: 16px 0 0 var(--gutter);
-  padding: 6px 0;
-  font-size: 17px;
-  font-style: italic;
-  border: 0;
-  background: none;
-  color: #5d5294;
-  cursor: pointer;
-}
-.reveal-label {
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-decoration-color: color-mix(in srgb, #5d5294 45%, transparent);
-  text-underline-offset: 5px;
-  transition: text-decoration-color 0.2s ease;
-}
-.reveal-btn:hover .reveal-label {
-  text-decoration-color: #5d5294;
-}
-.row-in {
-  animation: row-in 0.45s ease both;
-}
-@keyframes row-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-}
-
-/* "Start my story" button, always visible at the bottom of the screen */
-.sticky-start {
-  position: sticky;
-  bottom: 0;
-  /* Sits right under the content; the free space goes below it, so the footer stays at the bottom. */
-  margin-bottom: auto;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
-  background: linear-gradient(to bottom, transparent, var(--color-bg) 40%);
-}
-@media (min-width: 720px) {
-  .sticky-start {
-    background: none;
-  }
-}
-
 
 .footer {
   padding: 18px 40px;
@@ -784,6 +800,26 @@ button {
   white-space: pre-wrap;
   user-select: text;
   -webkit-user-select: text;
+}
+
+/* ---------- Easter egg ---------- */
+
+.secret {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    color-mix(in srgb, var(--color-accent) 22%, var(--color-bg)) 0%,
+    var(--color-bg) 72%
+  );
+  cursor: pointer;
+  animation: tms-type 0.6s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {

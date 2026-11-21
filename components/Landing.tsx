@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useLang } from "@/lib/i18n";
-import { durLeft, splitParas } from "@/lib/strings";
+import { durLeft, isSecret, splitParas } from "@/lib/strings";
 import { initAnalytics, track } from "@/lib/track";
 import { PenIcon } from "./icons";
 import NewStoryDialog from "./NewStoryDialog";
+import SecretOverlay from "./SecretOverlay";
 
 const WEEK = 7 * 864e5;
 const DRAFT_KEY = "tms-wdraft";
@@ -20,8 +21,7 @@ export default function Landing() {
   const [sent, setSent] = useState(false);
   const [sentAt, setSentAt] = useState(0);
   const [now, setNow] = useState(0);
-  // How much of the sample story is shown: 1–3 paragraphs, 4 = the visitor's turn to write.
-  const [shown, setShown] = useState(1);
+  const [secret, setSecret] = useState(false);
   const ta = useRef<HTMLTextAreaElement>(null);
   const pendingCaret = useRef<number | null>(null);
 
@@ -64,7 +64,7 @@ export default function Landing() {
       if (document.activeElement === el && el.selectionEnd >= el.value.length - 1 && bottom > limit)
         window.scrollBy({ top: bottom - limit });
     }
-  }, [draft, sent, shown]);
+  }, [draft, sent]);
 
   const insert = useCallback((text: string) => {
     const el = ta.current;
@@ -92,8 +92,12 @@ export default function Landing() {
   };
 
   const send = () => {
+    if (isSecret(draft)) {
+      setSecret(true);
+      return;
+    }
     if (draft.trim()) {
-      track("demo_send", { words: draft.trim().split(/\s+/).length, text: draft.trim() }, lang);
+      track("demo_send", { words: draft.trim().split(/\s+/).length }, lang);
       setSent(true);
       setSentAt(Date.now());
     }
@@ -109,15 +113,9 @@ export default function Landing() {
   const paras = sent ? splitParas(draft) : [];
   const clock = sent ? `${L.leftPrefix} ${durLeft(L, WEEK - Math.max(0, (now || Date.now()) - sentAt))}` : "";
 
-  const openNew = () => {
-    track("start_click", { revealed: shown }, lang);
+  const openNew = (position: "hero" | "closing") => {
+    track("start_click", { position }, lang);
     setDialogOpen(true);
-  };
-
-  const reveal = () => {
-    const step = shown === 1 ? "julie" : shown === 2 ? "thomas" : "you";
-    track("example_reveal_click", { step }, lang);
-    setShown(shown + 1);
   };
 
   const switchLang = () => {
@@ -136,71 +134,87 @@ export default function Landing() {
         </button>
       </header>
 
-      <main style={{ width: "100%", maxWidth: 1000, margin: "0 auto" }}>
-        <section className="intro">
-          <h1 className="intro-title">{W.howTitle}</h1>
-          <p className="intro-text">
-            {W.concept} <em>{W.conceptQ}</em>
-          </p>
+      <main style={{ maxWidth: 1000, margin: "0 auto" }}>
+        <section className="hero">
+          <span className="kicker">{W.kicker}</span>
+          <h1 className="hero-title">
+            Twist My <span style={{ fontStyle: "italic" }}>Story</span>
+          </h1>
+          <p className="tagline">{L.tagline}</p>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 14 }}>
+            <button type="button" className="cta" onClick={() => openNew("hero")}>
+              <PenIcon />
+              <span className="cta-label">{W.start}</span>
+            </button>
+          </div>
         </section>
 
-        <div className="sep">
+        <div className="lines">
+          <p className="lines-big">
+            {W.line1}
+            <br />
+            {W.line2}
+          </p>
+          <p className="tagline" style={{ marginTop: -4 }}>
+            {W.question}
+          </p>
+        </div>
+
+        <div className="sep" aria-hidden="false">
           <i style={{ background: "linear-gradient(to right,transparent,rgba(28,30,42,.25))" }} />
           <span className="sep-label">{W.exLabel}</span>
           <i style={{ background: "linear-gradient(to left,transparent,rgba(28,30,42,.25))" }} />
         </div>
 
         <section className="demo" data-tms-story="" data-tms-demo="">
+          <h2 className="demo-title">{W.exTitle}</h2>
           <div className="demo-meta">
             <span>
-              <span className="dot" style={{ background: "var(--ink-you)" }} />
-              {W.authorA}
+              <span className="dot" style={{ background: "var(--ink-julie)" }} />
+              {W.withJulie}
             </span>
             <span>
-              <span className="dot" style={{ background: "var(--ink-julie)" }} />
-              {W.authorB}
+              <span className="dot" style={{ background: "var(--ink-you)" }} />
+              {W.you}
             </span>
+            <span>{W.perWeek}</span>
           </div>
 
           <article className="article" data-tms-article="">
+            <div className="ch-head" data-tms-head="">
+              <div>
+                <span className="ch-num">{W.chapter}</span>
+                <span className="ch-title">{W.chTitle}</span>
+                <span className="ch-rule" />
+              </div>
+            </div>
             {[
-              [W.d1, W.p1, "var(--ink-you)"],
-              [W.d2, W.p2, "var(--ink-julie)"],
-              [W.d3, W.p3, "var(--ink-you)"],
-            ]
-              .slice(0, Math.min(shown, 3))
-              .map(([d, p, c]) => (
-                <div className="row row-in" data-tms-row="" key={d}>
-                  <span className="row-date" data-tms-date="">
-                    {d}
-                  </span>
-                  <p className="row-text" style={{ color: c }}>
-                    {p}
-                  </p>
-                </div>
-              ))}
+              [W.d1, W.p1, "var(--ink-julie)"],
+              [W.d2, W.p2, "var(--ink-you)"],
+              [W.d3, W.p3, "var(--ink-julie)"],
+            ].map(([d, p, c]) => (
+              <div className="row" data-tms-row="" key={d}>
+                <span className="row-date" data-tms-date="">
+                  {d}
+                </span>
+                <p className="row-text" style={{ color: c }}>
+                  {p}
+                </p>
+              </div>
+            ))}
             {paras.map((p, i) => (
-              <div className="row row-in" data-tms-row="" key={"u" + i}>
+              <div className="row" data-tms-row="" key={"u" + i}>
                 <span className="row-date" data-tms-date="">
                   {i ? "" : W.today}
                 </span>
-                <p className="row-text" style={{ color: "var(--ink-julie)", textIndent: p.indent }}>
+                <p className="row-text" style={{ color: "var(--ink-you)", textIndent: p.indent }}>
                   {p.text}
                 </p>
               </div>
             ))}
           </article>
 
-          {shown < 4 ? (
-            <button
-              type="button"
-              className="reveal-btn"
-              onClick={reveal}
-            >
-              <span className="reveal-label">{shown === 1 ? W.revealB : shown === 2 ? W.revealA : W.revealYou}</span>
-            </button>
-          ) : (
-          <div className="row-in" style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
+          <div style={{ marginTop: 28, display: "flex", flexDirection: "column", gap: 14, paddingBottom: 20 }}>
             {!sent ? (
               <>
                 <div className="turn-label">
@@ -212,7 +226,7 @@ export default function Landing() {
                   <textarea
                     ref={ta}
                     className="editor"
-                   
+                    data-tms-editor=""
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     onKeyDown={onKey}
@@ -233,7 +247,7 @@ export default function Landing() {
                     </div>
                   )}
                 </div>
-                <div className="editor-bar">
+                <div className="editor-bar" data-tms-editor="">
                   <span style={{ fontSize: 12, color: "#6d7180", marginRight: "auto" }}>
                     {n ? `${n} ${n > 1 ? W.words : W.word}` : ""}
                   </span>
@@ -253,17 +267,19 @@ export default function Landing() {
               </div>
             )}
           </div>
-          )}
         </section>
 
+        <div className="closing-rule" />
+        <section className="closing" data-tms-close="">
+          <p className="lines-big" style={{ margin: "0 0 6px", fontSize: "clamp(26px,5vw,32px)" }}>
+            {W.closeQ}
+          </p>
+          <button type="button" className="cta" onClick={() => openNew("closing")}>
+            <PenIcon />
+            <span className="cta-label">{W.closeCta}</span>
+          </button>
+        </section>
       </main>
-
-      <div className="sticky-start">
-        <button type="button" className="cta" onClick={openNew}>
-          <PenIcon />
-          <span className="cta-label">{W.start}</span>
-        </button>
-      </div>
 
       <footer className="footer">
         <a href="#">{W.legal}</a>
@@ -272,6 +288,16 @@ export default function Landing() {
       </footer>
 
       <NewStoryDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
+
+      {secret && (
+        <SecretOverlay
+          onClose={() => {
+            setSecret(false);
+            setSent(true);
+            setSentAt(Date.now());
+          }}
+        />
+      )}
     </div>
   );
 }
