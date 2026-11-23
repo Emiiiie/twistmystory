@@ -38,6 +38,10 @@ npm run lint     # TypeScript check
 
 Import the GitHub repository into Vercel: Next.js is detected automatically, no configuration needed. The PostHog variables are set in *Settings → Environment Variables* (as plain config, not secrets). Every merge to `main` is deployed to production.
 
+### Beta (`beta` branch)
+
+The `beta` branch is where the real app (the future site) is built; it is served at the `beta.` subdomain via a Vercel branch domain. Beta and preview deployments send nothing to PostHog and are hidden from search engines (`noindex`); only production is tracked and indexed. When the beta is ready, it replaces `main`.
+
 ## Structure
 
 - `app/`: layout, fonts (IM Fell English, EB Garamond), styles (`design.css` = tokens and responsive rules from the original design, `globals.css` = rebuilt design system and page styles).

@@ -16,6 +16,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
   },
+  // Only the production site may appear in search engines; the beta and previews stay hidden.
+  ...(process.env.VERCEL_ENV !== "production" && { robots: { index: false, follow: false } }),
 };
 
 export const viewport: Viewport = {

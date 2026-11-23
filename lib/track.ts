@@ -21,6 +21,9 @@ let client: Promise<PostHog | null> | null = null;
 export function initAnalytics(): Promise<PostHog | null> {
   if (client) return client;
   if (typeof window === "undefined") return Promise.resolve(null);
+  // Beta and preview deployments never send anything, so tests do not pollute the market test data.
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" || window.location.hostname.startsWith("beta."))
+    return (client = Promise.resolve(null));
   if (!KEY) {
     if (process.env.NODE_ENV === "development")
       console.error(

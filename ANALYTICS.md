@@ -10,6 +10,7 @@ This file lists every event sent by the Twist My Story market test site.
   - `initAnalytics()` loads and initializes PostHog when the page loads.
 - Every event is **counted in `localStorage`** (key `tms-fd`), even without PostHog.
 - It is **sent to PostHog only if `NEXT_PUBLIC_POSTHOG_KEY` is set**. Without a key, nothing leaves the browser. In development, a console error flags the missing key.
+- **Beta and preview deployments never send anything** (Vercel preview environment, or a hostname starting with `beta.`), so tests do not pollute the market test data.
 - PostHog project: EU cloud (`https://eu.i.posthog.com`).
 
 ### Environment variables
