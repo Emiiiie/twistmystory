@@ -49,6 +49,9 @@ Run `npm run lint` and `npm run build` before committing. There are no tests.
 
 ## Git workflow and deployment
 
-- **Never open pull requests.** Always commit and push directly to `main`.
+- **At the start of every conversation, before changing anything, ask the owner which version to work on: `beta` or `main`.** Then work on, commit to and push to that branch only.
+  - `main` = the live site (the market test), served at the main domain.
+  - `beta` = the future app, built on the `beta` branch and served at the `beta.` subdomain (Vercel branch domain, Preview environment). Beta sends nothing to PostHog and is hidden from search engines. One day it will replace `main`; never merge it into `main` unless the owner asks.
+- **Never open pull requests.** Commit and push directly to the chosen branch (`main` or `beta`).
 - Vercel deploys `main` to production automatically: **every push to `main` goes live within a minute or two.** So before every push, run `npm run lint` and `npm run build` and only push if both pass.
 - If something breaks after a push, the fastest fix is Vercel → Deployments → previous deployment → "Promote to Production" (instant rollback), then fix the code.
